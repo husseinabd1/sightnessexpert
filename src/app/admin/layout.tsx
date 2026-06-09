@@ -11,7 +11,6 @@ export default function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const router = useRouter();
   const { user, loading } = useAuth();
 
@@ -34,11 +33,11 @@ export default function AdminLayout({
   return (
     <div className="flex h-screen bg-black text-white">
       {/* Sidebar */}
-      <AdminSidebar open={sidebarOpen} setOpen={setSidebarOpen} />
+      <AdminSidebar />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <AdminNavbar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+        <AdminNavbar />
         <main className="flex-1 overflow-auto bg-black">
           <div className="p-8">
             {children}

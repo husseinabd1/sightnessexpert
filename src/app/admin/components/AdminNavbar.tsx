@@ -4,10 +4,10 @@ import { useAuth } from '@/hooks';
 import { Bell, Menu, User } from 'lucide-react';
 
 interface AdminNavbarProps {
-  onMenuClick: () => void;
+  onMenuClick?: () => void;
 }
 
-export default function AdminNavbar({ onMenuClick }: AdminNavbarProps) {
+export default function AdminNavbar({ onMenuClick }: AdminNavbarProps = {}) {
   const { user } = useAuth();
 
   return (

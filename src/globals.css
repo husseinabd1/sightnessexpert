@@ -79,7 +79,6 @@ body {
 }
 
 .animate-fade-in-up {
-  @apply animate-duration-1000;
   animation: fadeInUp 0.8s ease-out;
 }
 
