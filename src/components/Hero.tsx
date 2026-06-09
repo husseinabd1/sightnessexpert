@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 
@@ -61,6 +62,17 @@ export const Hero = () => {
           </span>
         </motion.div>
 
+        {/* Logo */}
+        <motion.div variants={itemVariants} className="mb-12">
+          <Image 
+            src="/logo.svg" 
+            alt="Sightness Expert Logo"
+            width={200}
+            height={200}
+            className="w-48 h-48 mx-auto opacity-90 hover:opacity-100 transition-opacity"
+          />
+        </motion.div>
+
         {/* Main heading */}
         <motion.h1
           variants={itemVariants}
@@ -72,9 +84,16 @@ export const Hero = () => {
         {/* Subheading */}
         <motion.p
           variants={itemVariants}
-          className="text-lg md:text-xl text-gray-300 font-light mb-12 max-w-2xl mx-auto leading-relaxed"
+          className="text-lg md:text-xl text-gray-300 font-light mb-4 max-w-2xl mx-auto leading-relaxed"
         >
-          Discover ultra-premium visual products and creative services crafted with meticulous attention to detail. Experience luxury redefined.
+          Eyewear & Contact Lenses
+        </motion.p>
+
+        <motion.p
+          variants={itemVariants}
+          className="text-sm md:text-base text-gray-400 font-light mb-12 max-w-2xl mx-auto leading-relaxed"
+        >
+          Discover ultra-premium visual products crafted with meticulous attention to detail. Experience luxury redefined.
         </motion.p>
 
         {/* CTA Buttons */}

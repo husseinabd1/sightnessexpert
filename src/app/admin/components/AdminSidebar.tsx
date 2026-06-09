@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import { Menu, X, LogOut, LayoutDashboard, Package, Users, ShoppingCart, Tag, ImageIcon, Settings } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -43,9 +44,18 @@ export default function AdminSidebar() {
         className="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 md:translate-x-0 z-40"
       >
         {/* Logo */}
-        <div className="p-6 border-b border-gray-200">
-          <h1 className="text-2xl font-bold text-black">SE Admin</h1>
-          <p className="text-sm text-gray-600">Sightness Expert</p>
+        <div className="p-6 border-b border-gray-200 flex items-center gap-3">
+          <Image 
+            src="/logo.svg" 
+            alt="Sightness Expert"
+            width={32}
+            height={32}
+            className="w-8 h-8"
+          />
+          <div>
+            <h1 className="text-lg font-semibold text-black">SE Admin</h1>
+            <p className="text-xs text-gray-600">Sightness Expert</p>
+          </div>
         </div>
 
         {/* Navigation */}

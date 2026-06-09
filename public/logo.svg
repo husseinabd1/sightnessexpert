@@ -1,0 +1,35 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Hair -->
+  <path d="M 180 60 Q 170 80 175 100 Q 180 85 190 70 Q 195 55 200 40 Q 205 55 210 70 Q 220 85 225 100 Q 230 80 220 60 Q 210 45 200 40 Q 190 45 180 60" fill="black"/>
+  
+  <!-- Face circle -->
+  <circle cx="200" cy="160" r="60" fill="none" stroke="black" stroke-width="2"/>
+  
+  <!-- Left eye -->
+  <g>
+    <ellipse cx="175" cy="150" rx="20" ry="25" fill="none" stroke="black" stroke-width="2.5"/>
+    <circle cx="175" cy="155" r="6" fill="black"/>
+  </g>
+  
+  <!-- Right eye -->
+  <g>
+    <ellipse cx="225" cy="150" rx="20" ry="25" fill="none" stroke="black" stroke-width="2.5"/>
+    <circle cx="225" cy="155" r="6" fill="black"/>
+  </g>
+  
+  <!-- Nose -->
+  <path d="M 200 170 L 200 185" stroke="black" stroke-width="2" fill="none"/>
+  
+  <!-- Mouth -->
+  <path d="M 190 200 Q 200 210 210 200" stroke="black" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  
+  <!-- Text -->
+  <text x="200" y="260" font-family="Arial, sans-serif" font-size="36" font-weight="300" text-anchor="middle" letter-spacing="2" fill="black">
+    SIGHTNESS EXPERT
+  </text>
+  
+  <!-- Subtitle -->
+  <text x="200" y="290" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" letter-spacing="3" fill="black" opacity="0.8">
+    EYEWEAR &amp; CONTACT LENSES
+  </text>
+</svg>
