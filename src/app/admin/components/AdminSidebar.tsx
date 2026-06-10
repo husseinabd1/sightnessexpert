@@ -23,7 +23,7 @@ export default function AdminSidebar() {
     { href: '/admin', label: 'Orders', icon: ShoppingCart },
     { href: '/admin', label: 'Discounts', icon: Tag },
     { href: '/admin', label: 'Portfolio', icon: ImageIcon },
-    { href: '/admin', label: 'Settings', icon: Settings },
+    { href: '/admin/settings', label: 'Settings', icon: Settings },
   ];
 
   return (
