@@ -82,42 +82,8 @@ interface FeaturedProductsProps {
 }
 
 export const FeaturedProducts = ({ products = [] }: FeaturedProductsProps) => {
-  // Default mock products if none provided
-  const defaultProducts: ProductCardProps[] = [
-    {
-      id: '1',
-      name: 'Premium Visual Experience',
-      price: 299,
-      originalPrice: 399,
-      image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=500&h=500&fit=crop',
-      slug: 'premium-visual-experience',
-      featured: true,
-    },
-    {
-      id: '2',
-      name: 'Luxury Design Collection',
-      price: 199,
-      image: 'https://images.unsplash.com/photo-1598930113854-38c6a72d0e0f?w=500&h=500&fit=crop',
-      slug: 'luxury-design-collection',
-      featured: true,
-    },
-    {
-      id: '3',
-      name: 'Exclusive Portfolio Set',
-      price: 249,
-      originalPrice: 349,
-      image: 'https://images.unsplash.com/photo-1606115915156-f7e3f0d3c7ba?w=500&h=500&fit=crop',
-      slug: 'exclusive-portfolio-set',
-    },
-    {
-      id: '4',
-      name: 'Creative Master Edition',
-      price: 349,
-      image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=500&h=500&fit=crop',
-      slug: 'creative-master-edition',
-      featured: true,
-    },
-  ];
+  // Empty products - all products should be added via admin dashboard
+  const defaultProducts: ProductCardProps[] = [];
 
   const displayProducts = products.length > 0 ? products : defaultProducts;
 
@@ -139,27 +105,47 @@ export const FeaturedProducts = ({ products = [] }: FeaturedProductsProps) => {
           </p>
         </motion.div>
 
-        {/* Products Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {displayProducts.map((product) => (
-            <ProductCard key={product.id} {...product} />
-          ))}
-        </div>
+        {/* Products Grid or Empty State */}
+        {displayProducts.length > 0 ? (
+          <>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+              {displayProducts.map((product) => (
+                <ProductCard key={product.id} {...product} />
+              ))}
+            </div>
 
-        {/* View All Button */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          className="text-center mt-16"
-        >
-          <Link
-            href="/shop"
-            className="inline-block px-8 py-4 border-2 border-white text-white font-semibold text-sm tracking-wider hover:bg-white hover:text-black transition-colors duration-300"
+            {/* View All Button */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              className="text-center mt-16"
+            >
+              <Link
+                href="/shop"
+                className="inline-block px-8 py-4 border-2 border-white text-white font-semibold text-sm tracking-wider hover:bg-white hover:text-black transition-colors duration-300"
+              >
+                View All Products
+              </Link>
+            </motion.div>
+          </>
+        ) : (
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="flex flex-col items-center justify-center py-20 border border-white/10 rounded-lg bg-white/5"
           >
-            View All Products
-          </Link>
-        </motion.div>
+            <h3 className="text-2xl font-light mb-4">No Products Available</h3>
+            <p className="text-gray-400 font-light mb-6">Start by adding products through the admin dashboard</p>
+            <Link
+              href="/auth/login"
+              className="px-6 py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              Go to Admin Dashboard
+            </Link>
+          </motion.div>
+        )}
       </div>
     </section>
   );

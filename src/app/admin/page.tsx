@@ -8,6 +8,7 @@ import {
   TrendingUp,
 } from 'lucide-react';
 import { formatCurrency } from '@/utils/helpers';
+import { format } from 'date-fns';
 
 interface StatCardProps {
   label: string;
@@ -39,40 +40,40 @@ const StatCard = ({ label, value, icon, trend }: StatCardProps) => (
 );
 
 export default function AdminDashboard() {
+  // Get today's date
+  const today = new Date();
+  const formattedDate = format(today, 'EEEE, MMMM d, yyyy');
+
   // Mock data - replace with real data from Supabase
   const stats = [
     {
       label: 'Total Revenue',
-      value: formatCurrency(45230),
+      value: formatCurrency(0),
       icon: <DollarSign size={24} />,
-      trend: 12,
+      trend: 0,
     },
     {
       label: 'Total Orders',
-      value: '328',
+      value: '0',
       icon: <ShoppingCart size={24} />,
-      trend: 8,
+      trend: 0,
     },
     {
       label: 'Total Customers',
-      value: '1,247',
+      value: '0',
       icon: <Users size={24} />,
-      trend: 15,
+      trend: 0,
     },
     {
       label: 'Growth',
-      value: '+23%',
+      value: '0%',
       icon: <TrendingUp size={24} />,
-      trend: 23,
+      trend: 0,
     },
   ];
 
   const recentOrders = [
-    { id: '#1001', customer: 'John Doe', amount: 299.99, status: 'completed' },
-    { id: '#1002', customer: 'Jane Smith', amount: 199.99, status: 'processing' },
-    { id: '#1003', customer: 'Mike Johnson', amount: 449.99, status: 'pending' },
-    { id: '#1004', customer: 'Sarah Williams', amount: 349.99, status: 'completed' },
-    { id: '#1005', customer: 'Tom Brown', amount: 249.99, status: 'processing' },
+    { id: '#1001', customer: 'No orders yet', amount: 0, status: 'pending' },
   ];
 
   return (
@@ -83,7 +84,10 @@ export default function AdminDashboard() {
         animate={{ opacity: 1 }}
       >
         <h1 className="text-3xl font-light tracking-wide mb-2">Dashboard</h1>
-        <p className="text-gray-400">Welcome back! Here's your business overview.</p>
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-gray-400">Welcome back! Here's your business overview.</p>
+          <p className="text-gray-500 text-sm font-light mt-2 sm:mt-0">{formattedDate}</p>
+        </div>
       </motion.div>
 
       {/* Stats Grid */}
@@ -103,16 +107,8 @@ export default function AdminDashboard() {
           className="lg:col-span-2 bg-white/5 border border-white/10 rounded-lg p-6"
         >
           <h2 className="text-lg font-light mb-6 tracking-wide">Sales Overview</h2>
-          <div className="h-64 flex items-end justify-around">
-            {[65, 78, 90, 81, 70, 85, 95, 88, 92, 86, 79, 95].map((value, i) => (
-              <motion.div
-                key={i}
-                initial={{ height: 0 }}
-                animate={{ height: `${value}%` }}
-                transition={{ delay: i * 0.05, duration: 0.8 }}
-                className="w-6 bg-gradient-to-t from-white/50 to-white/20 rounded-t-sm hover:from-white hover:to-white/50 transition-colors"
-              />
-            ))}
+          <div className="h-64 flex items-center justify-center text-gray-400">
+            <p className="font-light">No sales data yet</p>
           </div>
         </motion.div>
 
@@ -124,17 +120,8 @@ export default function AdminDashboard() {
           className="bg-white/5 border border-white/10 rounded-lg p-6"
         >
           <h2 className="text-lg font-light mb-6 tracking-wide">Top Products</h2>
-          <div className="space-y-4">
-            {['Premium Visual Experience', 'Luxury Design', 'Portfolio Set', 'Master Edition'].map(
-              (product, i) => (
-                <div key={i} className="flex items-center justify-between p-3 rounded-lg hover:bg-white/5 transition-colors">
-                  <span className="text-sm font-light">{product}</span>
-                  <span className="text-xs bg-white/10 px-2 py-1 rounded-full">
-                    {Math.floor(Math.random() * 100) + 20} sales
-                  </span>
-                </div>
-              )
-            )}
+          <div className="space-y-4 text-gray-400 font-light">
+            <p>No products yet. Add products from the Products page.</p>
           </div>
         </motion.div>
       </div>
