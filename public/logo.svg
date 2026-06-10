@@ -1,35 +1,67 @@
 <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
-  <!-- Hair -->
-  <path d="M 180 60 Q 170 80 175 100 Q 180 85 190 70 Q 195 55 200 40 Q 205 55 210 70 Q 220 85 225 100 Q 230 80 220 60 Q 210 45 200 40 Q 190 45 180 60" fill="black"/>
+  <!-- Hair/Feather top left -->
+  <path d="M 160 80 Q 150 70 145 65 Q 155 75 165 85 Z" fill="black"/>
   
-  <!-- Face circle -->
-  <circle cx="200" cy="160" r="60" fill="none" stroke="black" stroke-width="2"/>
+  <!-- Main feather/hair piece -->
+  <path d="M 170 75 Q 180 55 200 50 Q 195 65 190 80 Q 185 90 180 95 Z" fill="black"/>
+  <path d="M 200 50 Q 220 55 230 75 Q 220 85 210 90 Q 205 65 200 50 Z" fill="black"/>
   
-  <!-- Left eye -->
+  <!-- Face outline -->
+  <circle cx="200" cy="160" r="55" fill="none" stroke="black" stroke-width="0"/>
+  
+  <!-- Left Eye Frame (Glasses) -->
   <g>
-    <ellipse cx="175" cy="150" rx="20" ry="25" fill="none" stroke="black" stroke-width="2.5"/>
-    <circle cx="175" cy="155" r="6" fill="black"/>
+    <!-- Outer circle -->
+    <circle cx="170" cy="150" r="28" fill="none" stroke="black" stroke-width="3"/>
+    <!-- Inner lens area -->
+    <circle cx="170" cy="150" r="24" fill="none" stroke="black" stroke-width="2" opacity="0.3"/>
   </g>
   
-  <!-- Right eye -->
+  <!-- Right Eye Frame (Glasses) -->
   <g>
-    <ellipse cx="225" cy="150" rx="20" ry="25" fill="none" stroke="black" stroke-width="2.5"/>
-    <circle cx="225" cy="155" r="6" fill="black"/>
+    <!-- Outer circle -->
+    <circle cx="230" cy="150" r="28" fill="none" stroke="black" stroke-width="3"/>
+    <!-- Inner lens area -->
+    <circle cx="230" cy="150" r="24" fill="none" stroke="black" stroke-width="2" opacity="0.3"/>
   </g>
   
-  <!-- Nose -->
-  <path d="M 200 170 L 200 185" stroke="black" stroke-width="2" fill="none"/>
+  <!-- Bridge connecting glasses -->
+  <line x1="198" y1="148" x2="202" y2="148" stroke="black" stroke-width="3"/>
+  
+  <!-- Left temple piece -->
+  <line x1="142" y1="150" x2="155" y2="150" stroke="black" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Left temple hinge -->
+  <circle cx="142" cy="150" r="2" fill="black"/>
+  
+  <!-- Right temple piece -->
+  <line x1="245" y1="150" x2="258" y2="150" stroke="black" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Right temple hinge -->
+  <circle cx="258" cy="150" r="2" fill="black"/>
+  
+  <!-- Nose (simple lines) -->
+  <path d="M 198 160 L 196 170" stroke="black" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+  <path d="M 202 160 L 204 170" stroke="black" stroke-width="1.5" fill="none" stroke-linecap="round"/>
   
   <!-- Mouth -->
-  <path d="M 190 200 Q 200 210 210 200" stroke="black" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+  <path d="M 185 195 Q 200 202 215 195" stroke="black" stroke-width="2" fill="none" stroke-linecap="round"/>
   
-  <!-- Text -->
-  <text x="200" y="260" font-family="Arial, sans-serif" font-size="36" font-weight="300" text-anchor="middle" letter-spacing="2" fill="black">
+  <!-- Optional smile lines -->
+  <path d="M 192 200 L 190 204" stroke="black" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.6"/>
+  <path d="M 208 200 L 210 204" stroke="black" stroke-width="1" fill="none" stroke-linecap="round" opacity="0.6"/>
+  
+  <!-- Decorative line above text -->
+  <line x1="100" y1="250" x2="150" y2="250" stroke="black" stroke-width="1.5"/>
+  
+  <!-- Main text -->
+  <text x="200" y="280" font-family="'Arial', sans-serif" font-size="48" font-weight="300" text-anchor="middle" letter-spacing="3" fill="black">
     SIGHTNESS EXPERT
   </text>
   
+  <!-- Decorative line below text -->
+  <line x1="250" y1="250" x2="300" y2="250" stroke="black" stroke-width="1.5"/>
+  
   <!-- Subtitle -->
-  <text x="200" y="290" font-family="Arial, sans-serif" font-size="12" text-anchor="middle" letter-spacing="3" fill="black" opacity="0.8">
+  <text x="200" y="320" font-family="'Arial', sans-serif" font-size="14" text-anchor="middle" letter-spacing="2.5" fill="black">
     EYEWEAR &amp; CONTACT LENSES
   </text>
 </svg>
