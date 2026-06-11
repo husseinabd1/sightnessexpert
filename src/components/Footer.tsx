@@ -13,7 +13,7 @@ const TiktokIcon = ({ size = 20 }: { size?: number }) => (
 export const Footer = () => {
   const { language } = useLanguage();
 
-  // قاموس نصوص نقي ومفصول 100% لمنع تداخل اللغات
+  // قاموس نصوص نقي واحترافي 100% بدون أقواس أو ترجمات آلية ركيكة
   const content = {
     en: {
       aboutTitle: 'Sightness Expert',
@@ -21,35 +21,37 @@ export const Footer = () => {
       shopTitle: 'Shop',
       products: 'Products',
       categories: 'Categories',
-      sale: 'Sale',
+      sale: 'Special Offers',
       newArrivals: 'New Arrivals',
-      visionTitle: 'Our Vision',
-      visionSub: 'Medical grade, global aesthetics.',
-      visionDesc: 'Global standards for unmatched vision. We adhere to the highest optical medical standards and strict quality checks to ensure your eye safety.',
-      legalTitle: 'Legal Policies',
-      privacy: 'Privacy Policy & DMCA',
+      companyTitle: 'Company',
+      aboutUs: 'About Us',
+      contactUs: 'Contact',
+      careers: 'Careers',
+      press: 'Media Center',
+      legalTitle: 'Legal',
+      privacy: 'Privacy Policy',
       terms: 'Terms & Conditions',
       shipping: 'Shipping Policy',
       refunds: 'Refund Policy',
     },
     ar: {
-      aboutTitle: 'اتصال',
+      aboutTitle: 'سايتنس إكسبرت',
       aboutDesc: 'متجر إلكتروني — 24 ساعة',
-      shopTitle: 'محل',
-      products: 'منتجات',
-      categories: 'فئات',
-      sale: 'أوكازيون',
-      newArrivals: 'الوافدون الجدد',
-      visionTitle: 'قانوني',
+      shopTitle: 'المتجر',
+      products: 'كل المنتجات',
+      categories: 'الفئات والأنواع',
+      sale: 'العروض الخاصة',
+      newArrivals: 'وصل حديثاً',
+      companyTitle: 'الشركة',
+      aboutUs: 'من نحن',
+      contactUs: 'اتصل بنا',
+      careers: 'الوظائف',
+      press: 'المركز الإعلامي',
+      legalTitle: 'معلومات قانونية',
       privacy: 'سياسة الخصوصية',
       terms: 'الشروط والأحكام',
       shipping: 'سياسة الشحن',
-      refunds: 'سياسة العائدات',
-      companyTitle: 'شركة',
-      aboutUs: 'عن',
-      contactUs: 'اتصال',
-      careers: 'حياة مهنية',
-      press: 'يضغط'
+      refunds: 'سياسة الاسترجاع',
     }
   };
 
@@ -58,16 +60,16 @@ export const Footer = () => {
   return (
     <footer className="bg-black border-t border-white/10 text-white py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 text-center sm:text-inherit">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 text-center sm:text-start" dir={language === 'ar' ? 'rtl' : 'ltr'}>
           
-          {/* قسم الإيميل والوصف النظيف جداً */}
+          {/* قسم الإيميل النظيف جداً مالتك */}
           <div className="space-y-4">
             <h4 className="text-sm font-bold tracking-wider uppercase text-white">{t.aboutTitle}</h4>
             <div className="pt-2 space-y-3">
               <a href="mailto:sightnessexpert@gmail.com" className="text-sm text-gray-400 hover:text-white transition-colors inline-flex items-center gap-2 justify-center sm:justify-start">
                 <Mail size={16} /> sightnessexpert@gmail.com
               </a>
-              {/* هنا تم تنظيف التصميم ليصبح سطر واحد أنيق فقط */}
+              {/* هنا تم تنظيف التصميم ليكون فقط العبارة التي طلبتها في سطر فخم واحد */}
               <p className="text-xs text-gray-500 font-light tracking-wide">{t.aboutDesc}</p>
             </div>
           </div>
@@ -83,32 +85,32 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* قسم الشركة */}
+          {/* قسم الشركة بترجمة فخمة */}
           <div>
-            <h4 className="text-sm font-bold tracking-wider uppercase mb-6 text-white">{language === 'ar' ? 'شركة' : 'Company'}</h4>
+            <h4 className="text-sm font-bold tracking-wider uppercase mb-6 text-white">{t.companyTitle}</h4>
             <ul className="space-y-3">
-              <li><Link href="#about" className="text-sm text-gray-400 hover:text-white transition-colors">{language === 'ar' ? 'عن' : 'About'}</Link></li>
-              <li><Link href="/contact" className="text-sm text-gray-400 hover:text-white transition-colors">{language === 'ar' ? 'اتصال' : 'Contact'}</Link></li>
-              <li><span className="text-sm text-gray-600 cursor-not-allowed">{language === 'ar' ? 'حياة مهنية' : 'Careers'}</span></li>
-              <li><span className="text-sm text-gray-600 cursor-not-allowed">{language === 'ar' ? 'يضغط' : 'Press'}</span></li>
+              <li><Link href="#about" className="text-sm text-gray-400 hover:text-white transition-colors">{t.aboutUs}</Link></li>
+              <li><Link href="/contact" className="text-sm text-gray-400 hover:text-white transition-colors">{t.contactUs}</Link></li>
+              <li><span className="text-sm text-gray-600 cursor-not-allowed">{t.careers}</span></li>
+              <li><span className="text-sm text-gray-600 cursor-not-allowed">{t.press}</span></li>
             </ul>
           </div>
 
-          {/* قسم السياسات */}
+          {/* قسم السياسات القانونية النظيف */}
           <div>
-            <h4 className="text-sm font-bold tracking-wider uppercase mb-6 text-white">{t.visionTitle}</h4>
+            <h4 className="text-sm font-bold tracking-wider uppercase mb-6 text-white">{t.legalTitle}</h4>
             <ul className="space-y-3">
               <li><Link href="/privacy" className="text-sm text-gray-400 hover:text-white transition-colors">{t.privacy}</Link></li>
-              <li><Link href="/terms" className="text-sm text-gray-400 hover:text-white transition-colors">{language === 'ar' ? 'الشروط والأحكام' : t.terms}</Link></li>
-              <li><Link href="/shipping" className="text-sm text-gray-400 hover:text-white transition-colors">{language === 'ar' ? 'سياسة الشحن' : t.shipping}</Link></li>
-              <li><Link href="/refunds" className="text-sm text-gray-400 hover:text-white transition-colors">{language === 'ar' ? 'سياسة العائدات' : t.refunds}</Link></li>
+              <li><Link href="/terms" className="text-sm text-gray-400 hover:text-white transition-colors">{t.terms}</Link></li>
+              <li><Link href="/shipping" className="text-sm text-gray-400 hover:text-white transition-colors">{t.shipping}</Link></li>
+              <li><Link href="/refunds" className="text-sm text-gray-400 hover:text-white transition-colors">{t.refunds}</Link></li>
             </ul>
           </div>
 
         </div>
 
-        {/* الجزء السفلي من الفوتر */}
-        <div className="pt-8 mt-12 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4">
+        {/* أسفل الفوتر */}
+        <div className="pt-8 mt-12 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4" dir={language === 'ar' ? 'rtl' : 'ltr'}>
           <p className="text-xs text-gray-600">© {new Date().getFullYear()} Sightness Expert. All rights reserved.</p>
           <div className="flex items-center gap-6">
             <a href="https://www.instagram.com/sightness_expert/" target="_blank" rel="noopener noreferrer" className="text-gray-500 hover:text-white transition-colors"><Instagram size={18} /></a>
