@@ -9,7 +9,7 @@ export function ContactSection() {
   const content = {
     en: {
       heading: 'Get in Touch',
-      // تم تعديل الكلمة إلى We would لحل مشكلة علامة الاقتباس الفاشلة في فيرسل نهائياً
+      // تم استبدال علامة الاقتباس لتجنب مشاكل الـ Build نهائياً
       subheading: 'Have questions? We would love to hear from you. Contact us today.',
       email: 'Email',
       phone: 'Phone',
@@ -54,7 +54,6 @@ export function ContactSection() {
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           
-          {/* تفاصيل الاتصال الجانبية */}
           <div className="lg:col-span-4 space-y-8 bg-zinc-900/30 p-8 border border-white/5 rounded-2xl text-start">
             <div className="flex items-start gap-4">
               <Mail className="text-gray-400 mt-1 shrink-0" size={20} />
@@ -92,7 +91,6 @@ export function ContactSection() {
             </div>
           </div>
 
-          {/* نموذج المراسلة (الفورم الفخم) */}
           <div className="lg:col-span-8 bg-zinc-900/50 p-6 sm:p-8 border border-white/10 rounded-2xl">
             <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
