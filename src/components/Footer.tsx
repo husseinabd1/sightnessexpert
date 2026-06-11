@@ -2,8 +2,24 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-// استيراد الأيقونات الثلاثة المطلوبة فقط + أيقونة الإيميل
-import { Instagram, Facebook, Tiktok, Mail } from 'lucide-react';
+// استيراد الأيقونات المتوفرة دائماً والمضمونة
+import { Instagram, Facebook, Mail } from 'lucide-react';
+
+// رسمة أيقونة التيك توك بشكل مخصص لحل مشكلة إصدار المكتبة نهائياً
+const TiktokIcon = ({ size = 20 }: { size?: number }) => (
+  <svg 
+    width={size} 
+    height={size} 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+  >
+    <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+  </svg>
+);
 
 export const Footer = () => {
   const links = {
@@ -25,11 +41,11 @@ export const Footer = () => {
       { label: 'Shipping Policy', href: '/shipping' },
       { label: 'Return Policy', href: '/returns' },
     ],
-    // المنصات الثلاثة المحددة فقط بالروابط الحقيقية
+    // الروابط الثلاثة مضافة هنا بشكل صحيح
     social: [
       { icon: Instagram, href: 'https://www.instagram.com/sightness_expert/', label: 'Instagram' },
       { icon: Facebook, href: 'https://www.facebook.com/sightnessexpert', label: 'Facebook' },
-      { icon: Tiktok, href: 'https://www.tiktok.com/@sightness_expert', label: 'TikTok' },
+      { icon: TiktokIcon, href: 'https://www.tiktok.com/@sightness_expert', label: 'TikTok' },
     ],
   };
 
@@ -132,7 +148,7 @@ export const Footer = () => {
                   <Link
                     href={link.href}
                     className="text-sm text-gray-400 hover:text-white transition-colors"
-                    >
+                  >
                     {link.label}
                   </Link>
                 </li>
@@ -168,7 +184,7 @@ export const Footer = () => {
           viewport={{ once: true }}
           className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6"
         >
-          {/* Copyright التلقائي المحدث لسنة 2026 وما بعدها */}
+          {/* Copyright التلقائي */}
           <p className="text-sm text-gray-500">
             © {new Date().getFullYear()} Sightness Expert. All rights reserved.
           </p>
