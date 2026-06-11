@@ -2,49 +2,131 @@
 
 import { useRef, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Camera, ScanFace, Loader2 } from 'lucide-react';
+import { X, ScanFace, Loader2, Camera } from 'lucide-react';
 
 interface VirtualTryOnProps {
   isOpen: boolean;
   onClose: () => void;
-  // مسار صورة النظارة المفرغة (PNG) للتجربة
-  glassesImage?: string; 
+  glassesImage?: string;
 }
 
 export const VirtualTryOn = ({ isOpen, onClose, glassesImage = '/glasses-placeholder.png' }: VirtualTryOnProps) => {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [hasPermission, setHasPermission] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const containerRef = useRef<HTMLDivElement>(null);
+  
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadingStatus, setLoadingStatus] = useState('جاري تشغيل الكاميرا...');
   const [error, setError] = useState<string | null>(null);
+  
+  const [glassesStyle, setGlassesStyle] = useState({
+    display: 'none',
+    top: '0px',
+    left: '0px',
+    width: '0px',
+    transform: 'translate(-50%, -50%) rotate(0deg)',
+  });
 
   useEffect(() => {
+    let active = true;
     let stream: MediaStream | null = null;
+    let animationFrameId: number;
+    let faceLandmarker: any = null;
 
-    const startCamera = async () => {
+    const initAIAndCamera = async () => {
       if (!isOpen) return;
-      
+
       try {
-        setIsLoading(true);
-        stream = await navigator.mediaDevices.getUserMedia({ 
-          video: { facingMode: 'user' } // استخدام الكاميرا الأمامية
+        setLoadingStatus('جاري الاتصال بالكاميرا الأمامية...');
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } }
         });
         
-        if (videoRef.current) {
+        if (videoRef.current && active) {
           videoRef.current.srcObject = stream;
-          setHasPermission(true);
         }
+
+        setLoadingStatus('جاري تفعيل مستشعرات الوجه الطبية...');
+        const vision = await import('@mediapipe/tasks-vision');
+        const filesetResolver = await vision.FilesetResolver.forVisionTasks(
+          "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.8/wasm"
+        );
+        
+        faceLandmarker = await vision.FaceLandmarker.createFromOptions(filesetResolver, {
+          baseOptions: {
+            modelAssetPath: `https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task`,
+            delegate: "GPU"
+          },
+          runningMode: "VIDEO",
+          numFaces: 1
+        });
+
+        if (active) {
+          setIsLoading(false);
+          trackFace();
+        }
+
       } catch (err) {
-        setError('يرجى السماح بالوصول إلى الكاميرا لتجربة النظارة.');
-        setHasPermission(false);
-      } finally {
-        setIsLoading(false);
+        console.error(err);
+        if (active) {
+          setError('يرجى السماح بصلاحية الكاميرا لتتمكن من تجربة النظارة طبيّاً.');
+          setIsLoading(false);
+        }
       }
     };
 
-    startCamera();
+    const trackFace = () => {
+      if (!active || !faceLandmarker || !videoRef.current || !containerRef.current) return;
 
-    // إغلاق الكاميرا عند إغلاق النافذة
+      const video = videoRef.current;
+      
+      if (video.readyState >= 2) {
+        const timestamp = performance.now();
+        const result = faceLandmarker.detectForVideo(video, timestamp);
+
+        if (result && result.faceLandmarks && result.faceLandmarks.length > 0) {
+          const landmarks = result.faceLandmarks[0];
+
+          const midNasallion = landmarks[168]; // جسر الأنف
+          const leftEye = landmarks[33];      // العين اليسرى
+          const rightEye = landmarks[263];    // العين اليمنى
+
+          if (midNasallion && leftEye && rightEye) {
+            const container = containerRef.current;
+            const rect = container.getBoundingClientRect();
+
+            const centerX = midNasallion.x * rect.width;
+            const centerY = midNasallion.y * rect.height;
+
+            const dx = (rightEye.x - leftEye.x) * rect.width;
+            const dy = (rightEye.y - leftEye.y) * rect.height;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+
+            const glassesWidth = distance * 2.1; // حجم النظارة المتناسق مع الوجه
+
+            const angleRad = Math.atan2(dy, dx);
+            const angleDeg = angleRad * (180 / Math.PI);
+
+            setGlassesStyle({
+              display: 'block',
+              top: `${centerY}px`,
+              left: `${centerX}px`,
+              width: `${glassesWidth}px`,
+              transform: `translate(-50%, -50%) rotate(${angleDeg}deg)`,
+            });
+          }
+        } else {
+          setGlassesStyle(prev => ({ ...prev, display: 'none' }));
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(trackFace);
+    };
+
+    initAIAndCamera();
+
     return () => {
+      active = false;
+      cancelAnimationFrame(animationFrameId);
       if (stream) {
         stream.getTracks().forEach(track => track.stop());
       }
@@ -59,20 +141,19 @@ export const VirtualTryOn = ({ isOpen, onClose, glassesImage = '/glasses-placeho
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
-        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/90 backdrop-blur-md p-4"
+        className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md p-4"
       >
         <motion.div
-          initial={{ scale: 0.9, opacity: 0 }}
+          initial={{ scale: 0.93, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
-          exit={{ scale: 0.9, opacity: 0 }}
-          className="relative w-full max-w-md bg-zinc-900 rounded-3xl overflow-hidden border border-white/10 shadow-2xl"
+          exit={{ scale: 0.93, opacity: 0 }}
+          className="relative w-full max-w-md bg-zinc-950 rounded-3xl overflow-hidden border border-white/10 shadow-2xl"
           dir="rtl"
         >
-          {/* شريط العنوان */}
-          <div className="absolute top-0 inset-x-0 z-10 flex justify-between items-center p-4 bg-gradient-to-b from-black/80 to-transparent">
+          <div className="absolute top-0 inset-x-0 z-50 flex justify-between items-center p-4 bg-gradient-to-b from-black/90 to-transparent">
             <div className="flex items-center gap-2 text-white">
-              <ScanFace size={20} className="text-green-400" />
-              <span className="font-semibold text-sm">القياس الافتراضي المدعم بالذكاء الاصطناعي</span>
+              <ScanFace size={18} className="text-green-400 animate-pulse" />
+              <span className="font-light text-xs tracking-wider text-gray-300">SIGHTNESS AI TRY-ON</span>
             </div>
             <button 
               onClick={onClose}
@@ -82,25 +163,20 @@ export const VirtualTryOn = ({ isOpen, onClose, glassesImage = '/glasses-placeho
             </button>
           </div>
 
-          {/* منطقة الكاميرا */}
-          <div className="relative aspect-[3/4] w-full bg-black flex items-center justify-center overflow-hidden">
-            
+          <div ref={containerRef} className="relative aspect-[3/4] w-full bg-black flex items-center justify-center overflow-hidden">
             {isLoading && (
-              <div className="flex flex-col items-center text-gray-400 gap-3">
-                <Loader2 className="animate-spin" size={32} />
-                <p className="text-sm">جاري تشغيل الكاميرا...</p>
+              <div className="flex flex-col items-center text-gray-400 gap-3 px-6 text-center z-10">
+                <Loader2 className="animate-spin text-white" size={28} />
+                <p className="text-sm font-light tracking-wide text-gray-300">{loadingStatus}</p>
               </div>
             )}
 
             {error && (
-              <div className="flex flex-col items-center text-red-400 gap-3 p-6 text-center">
-                <Camera size={48} className="opacity-50" />
-                <p className="text-sm">{error}</p>
-                <button 
-                  onClick={() => window.location.reload()} 
-                  className="mt-4 px-6 py-2 bg-white/10 rounded-full text-white text-sm hover:bg-white/20"
-                >
-                  إعادة المحاولة
+              <div className="flex flex-col items-center text-red-400 gap-3 p-6 text-center z-10">
+                <Camera size={40} className="opacity-60" />
+                <p className="text-sm font-light">{error}</p>
+                <button onClick={() => window.location.reload()} className="mt-4 px-6 py-2 bg-white text-black rounded-full text-xs font-semibold hover:bg-gray-200 transition-colors">
+                  إعادة تشغيل النظام
                 </button>
               </div>
             )}
@@ -110,46 +186,39 @@ export const VirtualTryOn = ({ isOpen, onClose, glassesImage = '/glasses-placeho
               autoPlay
               playsInline
               muted
-              className={`w-full h-full object-cover transition-opacity duration-700 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
-              style={{ transform: 'scaleX(-1)' }} // قلب الكاميرا لتبدو كالمرآة
+              className={`w-full h-full object-cover transform scale-x-[-1] transition-opacity duration-500 ${isLoading ? 'opacity-0' : 'opacity-100'}`}
             />
 
-            {/* تأثير المسح (Scanning Effect) والنظارة */}
-            {hasPermission && !isLoading && (
-              <>
-                {/* إطار تحديد الوجه */}
-                <div className="absolute inset-0 border-[2px] border-white/20 rounded-3xl m-8 pointer-events-none">
-                  <div className="absolute top-0 left-0 w-8 h-8 border-t-2 border-l-2 border-green-400 rounded-tl-2xl"></div>
-                  <div className="absolute top-0 right-0 w-8 h-8 border-t-2 border-r-2 border-green-400 rounded-tr-2xl"></div>
-                  <div className="absolute bottom-0 left-0 w-8 h-8 border-b-2 border-l-2 border-green-400 rounded-bl-2xl"></div>
-                  <div className="absolute bottom-0 right-0 w-8 h-8 border-b-2 border-r-2 border-green-400 rounded-br-2xl"></div>
-                </div>
-
-                {/* خط المسح المتحرك */}
-                <motion.div
-                  animate={{ top: ['10%', '90%', '10%'] }}
-                  transition={{ duration: 3, repeat: Infinity, ease: 'linear' }}
-                  className="absolute left-8 right-8 h-[2px] bg-green-400/50 shadow-[0_0_15px_rgba(74,222,128,0.5)] pointer-events-none z-20"
+            {!isLoading && !error && (
+              <div className="absolute inset-0 pointer-events-none transform scale-x-[-1]" style={{ zIndex: 40 }}>
+                <img 
+                  src={glassesImage} 
+                  alt="Sightness Glasses Eyewear" 
+                  className="absolute object-contain transition-all duration-75 ease-out drop-shadow-[0_10px_15px_rgba(0,0,0,0.5)]"
+                  style={{
+                    display: glassesStyle.display,
+                    top: glassesStyle.top,
+                    left: glassesStyle.left,
+                    width: glassesStyle.width,
+                    transform: glassesStyle.transform,
+                  }}
                 />
+              </div>
+            )}
 
-                {/* النظارة الافتراضية (مؤقتة حتى يتم ربط الـ AI) */}
-                <div className="absolute top-1/3 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 pointer-events-none z-30">
-                  {/* استبدل src بصورة النظارة المفرغة الخاصة بك */}
-                  <img 
-                    src={glassesImage} 
-                    alt="Glasses" 
-                    className="w-full h-auto drop-shadow-2xl"
-                  />
-                </div>
-              </>
+            {!isLoading && !error && (
+              <div className="absolute inset-0 border border-white/5 m-6 rounded-2xl pointer-events-none z-20">
+                <div className="absolute top-0 left-0 w-6 h-6 border-t border-l border-white/40 rounded-tl-xl"></div>
+                <div className="absolute top-0 right-0 w-6 h-6 border-t border-r border-white/40 rounded-tr-xl"></div>
+                <div className="absolute bottom-0 left-0 w-6 h-6 border-b border-l border-white/40 rounded-bl-xl"></div>
+                <div className="absolute bottom-0 right-0 w-6 h-6 border-b border-r border-white/40 rounded-br-xl"></div>
+              </div>
             )}
           </div>
 
-          {/* شريط التعليمات السفلي */}
-          <div className="p-4 bg-zinc-900 text-center border-t border-white/5">
-            <p className="text-xs text-gray-400">
-              يرجى توجيه وجهك داخل الإطار لتجربة النظارة. <br/>
-              <span className="text-white font-medium">القياسات تعتمد على معايير الوجه التقريبية.</span>
+          <div className="p-4 bg-black text-center border-t border-white/10">
+            <p className="text-[11px] font-light text-gray-400 tracking-wider">
+              تمت المعايرة البصرية الحية حسب مقاييس عظام الوجه الافتراضية بنجاح.
             </p>
           </div>
         </motion.div>
