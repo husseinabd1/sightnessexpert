@@ -6,6 +6,9 @@ import { Mail, Phone, MapPin, Send } from 'lucide-react';
 import { useState } from 'react';
 
 const ContactPage = () => {
+  // 💡 يمكنك ربط هذا المتغير لاحقاً بالبيانات القادمة من لوحة التحكم (Admin Dashboard)
+  const phoneNumberFromAdmin = "+964 XX XXX XXXX"; 
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -63,17 +66,17 @@ const ContactPage = () => {
                 {
                   icon: Mail,
                   label: 'Email',
-                  value: 'hello@sightnessexpert.com',
+                  value: 'sightnessexpert@gmail.com', // تم التصحيح هنا
                 },
                 {
                   icon: Phone,
                   label: 'Phone',
-                  value: '+1 (555) 123-4567',
+                  value: phoneNumberFromAdmin, // مرتبط بالآدمن هنا
                 },
                 {
                   icon: MapPin,
                   label: 'Address',
-                  value: 'New York, NY 10001, USA',
+                  value: 'Baghdad, Iraq', // تم التحديث هنا
                 },
               ].map((item, i) => {
                 const Icon = item.icon;
@@ -83,7 +86,16 @@ const ContactPage = () => {
                       <Icon size={20} />
                       <h3 className="font-light text-lg">{item.label}</h3>
                     </div>
-                    <p className="text-gray-400 ml-8">{item.value}</p>
+                    {item.label === 'Email' ? (
+                      <a 
+                        href={`mailto:${item.value}`} 
+                        className="text-gray-400 ml-8 hover:text-white transition-colors block text-sm sm:text-base"
+                      >
+                        {item.value}
+                      </a>
+                    ) : (
+                      <p className="text-gray-400 ml-8 text-sm sm:text-base">{item.value}</p>
+                    )}
                   </div>
                 );
               })}
