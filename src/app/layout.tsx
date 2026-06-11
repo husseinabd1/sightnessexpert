@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   
   // 👇 هذا هو الجزء الجديد الذي أضفناه لربط شعار النظارات
   icons: {
-    icon: '/logo.svg',
+    icon: '/logo.png',
   },
   
   openGraph: {
