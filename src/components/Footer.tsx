@@ -2,10 +2,9 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-// استيراد الأيقونات المتوفرة دائماً والمضمونة
 import { Instagram, Facebook, Mail } from 'lucide-react';
 
-// رسمة أيقونة التيك توك بشكل مخصص لحل مشكلة إصدار المكتبة نهائياً
+// رسمة أيقونة التيك توك المخصصة لتجنب أخطاء Vercel
 const TiktokIcon = ({ size = 20 }: { size?: number }) => (
   <svg 
     width={size} 
@@ -24,24 +23,17 @@ const TiktokIcon = ({ size = 20 }: { size?: number }) => (
 export const Footer = () => {
   const links = {
     shop: [
-      { label: 'Products', href: '/shop' },
-      { label: 'Categories', href: '/categories' },
-      { label: 'Sale', href: '/shop?filter=sale' },
-      { label: 'New Arrivals', href: '/shop?sort=newest' },
-    ],
-    company: [
-      { label: 'About', href: '/about' },
-      { label: 'Contact', href: '/contact' },
-      { label: 'Career', href: '/career' },
-      { label: 'Press', href: '/press' },
+      { label: 'المنتجات (Products)', href: '/shop' },
+      { label: 'الفئات (Categories)', href: '/categories' },
+      { label: 'التخفيضات (Sale)', href: '/shop?filter=sale' },
+      { label: 'وصل حديثاً (New Arrivals)', href: '/shop?sort=newest' },
     ],
     legal: [
-      { label: 'Privacy Policy', href: '/privacy' },
-      { label: 'Terms & Conditions', href: '/terms' },
-      { label: 'Shipping Policy', href: '/shipping' },
-      { label: 'Return Policy', href: '/returns' },
+      { label: 'سياسة الخصوصية (Privacy Policy)', href: '/privacy' },
+      { label: 'الشروط والأحكام (Terms & Conditions)', href: '/terms' },
+      // سياسة الشحن عبر الواتساب
+      { label: 'سياسة الطلب والشحن عبر الواتساب', href: '#' }, 
     ],
-    // الروابط الثلاثة مضافة هنا بشكل صحيح
     social: [
       { icon: Instagram, href: 'https://www.instagram.com/sightness_expert/', label: 'Instagram' },
       { icon: Facebook, href: 'https://www.facebook.com/sightnessexpert', label: 'Facebook' },
@@ -65,8 +57,9 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="bg-black border-t border-white/10">
+    <footer className="bg-black border-t border-white/10" dir="rtl">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        
         {/* Newsletter Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -76,16 +69,16 @@ export const Footer = () => {
         >
           <div className="max-w-md">
             <h3 className="text-2xl font-light mb-4 tracking-wide">
-              Stay Updated
+              ابقَ على اطلاع
             </h3>
             <p className="text-gray-400 text-sm mb-6">
-              Subscribe to our newsletter for exclusive offers and new collections.
+              اشترك في القائمة البريدية ليصلك كل جديد عن عروضنا وتشكيلاتنا الحصرية.
             </p>
-            <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
+            <form className="flex gap-2" onSubmit={(e) => e.preventDefault()} dir="ltr">
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 bg-white/5 border border-white/20 px-4 py-3 text-sm focus:border-white outline-none transition-colors"
+                className="flex-1 bg-white/5 border border-white/20 px-4 py-3 text-sm focus:border-white outline-none transition-colors text-white"
               />
               <button
                 type="submit"
@@ -103,11 +96,11 @@ export const Footer = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-16"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-16 text-right"
         >
           {/* Shop Links */}
           <motion.div variants={itemVariants}>
-            <h4 className="text-sm font-semibold mb-6 tracking-wider">SHOP</h4>
+            <h4 className="text-sm font-bold mb-6 tracking-wider">تسوق معنا</h4>
             <ul className="space-y-3">
               {links.shop.map((link) => (
                 <li key={link.href}>
@@ -122,26 +115,24 @@ export const Footer = () => {
             </ul>
           </motion.div>
 
-          {/* Company Links */}
+          {/* About Us (الكليشة الجديدة المخصصة) */}
           <motion.div variants={itemVariants}>
-            <h4 className="text-sm font-semibold mb-6 tracking-wider">COMPANY</h4>
-            <ul className="space-y-3">
-              {links.company.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm text-gray-400 hover:text-white transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <h4 className="text-sm font-bold mb-6 tracking-wider">من نحن</h4>
+            <div className="text-sm text-gray-400 space-y-3 leading-relaxed">
+              <p className="font-semibold text-white" dir="ltr">Medical grade, global aesthetics.</p>
+              <p className="text-white font-medium">معايير عالمية لرؤية لا مثيل لها.</p>
+              <ul className="space-y-2 mt-2">
+                <li>• كولكشن نظارات طبية وشمسية</li>
+                <li>• عدسات لاصقة (Premium)</li>
+                <li>• تجهيز دقيق لوصفتك الطبية</li>
+                <li>• جودة فائقة وتصاميم حصرية تناسب ذوقك</li>
+              </ul>
+            </div>
           </motion.div>
 
           {/* Legal Links */}
           <motion.div variants={itemVariants}>
-            <h4 className="text-sm font-semibold mb-6 tracking-wider">LEGAL</h4>
+            <h4 className="text-sm font-bold mb-6 tracking-wider">سياسات وقوانين</h4>
             <ul className="space-y-3">
               {links.legal.map((link) => (
                 <li key={link.href}>
@@ -158,20 +149,22 @@ export const Footer = () => {
 
           {/* Contact Info */}
           <motion.div variants={itemVariants}>
-            <h4 className="text-sm font-semibold mb-6 tracking-wider">CONTACT</h4>
+            <h4 className="text-sm font-bold mb-6 tracking-wider">تواصل معنا</h4>
             <ul className="space-y-3">
               <li>
                 <a
                   href="mailto:sightnessexpert@gmail.com"
-                  className="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-2"
+                  className="text-sm text-gray-400 hover:text-white transition-colors flex items-center justify-end gap-2"
+                  dir="ltr"
                 >
-                  <Mail size={16} />
                   sightnessexpert@gmail.com
+                  <Mail size={16} />
                 </a>
               </li>
-              <li className="text-sm text-gray-400">
-                Available Monday - Friday<br />
-                9:00 AM - 6:00 PM EST
+              <li className="text-sm text-gray-400 mt-4 leading-relaxed">
+                متاح طوال اليوم، على مدار 24 ساعة <br />
+                للرد على استفساراتكم وتلبية طلباتكم. <br />
+                <span className="text-xs text-gray-500">(Available 24/7)</span>
               </li>
             </ul>
           </motion.div>
@@ -182,10 +175,10 @@ export const Footer = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6"
+          className="pt-8 border-t border-white/10 flex flex-col-reverse md:flex-row justify-between items-center gap-6"
         >
-          {/* Copyright التلقائي */}
-          <p className="text-sm text-gray-500">
+          {/* Copyright */}
+          <p className="text-sm text-gray-500" dir="ltr">
             © {new Date().getFullYear()} Sightness Expert. All rights reserved.
           </p>
 
