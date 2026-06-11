@@ -26,6 +26,12 @@ export const metadata: Metadata = {
     'portfolio',
   ],
   authors: [{ name: 'Sightness Expert' }],
+  
+  // 👇 هذا هو الجزء الجديد الذي أضفناه لربط شعار النظارات
+  icons: {
+    icon: '/logo.svg',
+  },
+  
   openGraph: {
     type: 'website',
     locale: 'en_US',
