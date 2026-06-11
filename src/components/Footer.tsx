@@ -13,7 +13,6 @@ const TiktokIcon = ({ size = 20 }: { size?: number }) => (
 export const Footer = () => {
   const { language } = useLanguage();
 
-  // قاموس نصوص نقي واحترافي 100% بدون أقواس أو ترجمات آلية ركيكة
   const content = {
     en: {
       aboutTitle: 'Sightness Expert',
@@ -62,19 +61,16 @@ export const Footer = () => {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 text-center sm:text-start" dir={language === 'ar' ? 'rtl' : 'ltr'}>
           
-          {/* قسم الإيميل النظيف جداً مالتك */}
           <div className="space-y-4">
             <h4 className="text-sm font-bold tracking-wider uppercase text-white">{t.aboutTitle}</h4>
             <div className="pt-2 space-y-3">
               <a href="mailto:sightnessexpert@gmail.com" className="text-sm text-gray-400 hover:text-white transition-colors inline-flex items-center gap-2 justify-center sm:justify-start">
                 <Mail size={16} /> sightnessexpert@gmail.com
               </a>
-              {/* هنا تم تنظيف التصميم ليكون فقط العبارة التي طلبتها في سطر فخم واحد */}
               <p className="text-xs text-gray-500 font-light tracking-wide">{t.aboutDesc}</p>
             </div>
           </div>
 
-          {/* قسم المتجر */}
           <div>
             <h4 className="text-sm font-bold tracking-wider uppercase mb-6 text-white">{t.shopTitle}</h4>
             <ul className="space-y-3">
@@ -85,7 +81,6 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* قسم الشركة بترجمة فخمة */}
           <div>
             <h4 className="text-sm font-bold tracking-wider uppercase mb-6 text-white">{t.companyTitle}</h4>
             <ul className="space-y-3">
@@ -96,7 +91,6 @@ export const Footer = () => {
             </ul>
           </div>
 
-          {/* قسم السياسات القانونية النظيف */}
           <div>
             <h4 className="text-sm font-bold tracking-wider uppercase mb-6 text-white">{t.legalTitle}</h4>
             <ul className="space-y-3">
@@ -109,7 +103,6 @@ export const Footer = () => {
 
         </div>
 
-        {/* أسفل الفوتر */}
         <div className="pt-8 mt-12 border-t border-white/5 flex flex-col sm:flex-row justify-between items-center gap-4" dir={language === 'ar' ? 'rtl' : 'ltr'}>
           <p className="text-xs text-gray-600">© {new Date().getFullYear()} Sightness Expert. All rights reserved.</p>
           <div className="flex items-center gap-6">
