@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { Instagram, Facebook, Mail } from 'lucide-react';
 
-// رسمة أيقونة التيك توك المخصصة لتجنب أخطاء Vercel
+// أيقونة التيك توك المخصصة لتجنب أخطاء سيرفر Vercel
 const TiktokIcon = ({ size = 20 }: { size?: number }) => (
   <svg 
     width={size} 
@@ -31,8 +31,7 @@ export const Footer = () => {
     legal: [
       { label: 'سياسة الخصوصية (Privacy Policy)', href: '/privacy' },
       { label: 'الشروط والأحكام (Terms & Conditions)', href: '/terms' },
-      // سياسة الشحن عبر الواتساب
-      { label: 'سياسة الطلب والشحن عبر الواتساب', href: '#' }, 
+      { label: 'سياسة الطلب والشحن عبر الواتساب', href: '#' },
     ],
     social: [
       { icon: Instagram, href: 'https://www.instagram.com/sightness_expert/', label: 'Instagram' },
@@ -57,7 +56,7 @@ export const Footer = () => {
   };
 
   return (
-    <footer className="bg-black border-t border-white/10" dir="rtl">
+    <footer className="bg-black border-t border-white/10 text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
         
         {/* Newsletter Section */}
@@ -69,12 +68,12 @@ export const Footer = () => {
         >
           <div className="max-w-md">
             <h3 className="text-2xl font-light mb-4 tracking-wide">
-              ابقَ على اطلاع
+              Stay Updated
             </h3>
             <p className="text-gray-400 text-sm mb-6">
               اشترك في القائمة البريدية ليصلك كل جديد عن عروضنا وتشكيلاتنا الحصرية.
             </p>
-            <form className="flex gap-2" onSubmit={(e) => e.preventDefault()} dir="ltr">
+            <form className="flex gap-2" onSubmit={(e) => e.preventDefault()}>
               <input
                 type="email"
                 placeholder="Enter your email"
@@ -96,11 +95,32 @@ export const Footer = () => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
-          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-16 text-right"
+          className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-16 text-left"
         >
-          {/* Shop Links */}
+          {/* العمود الأول: من نحن */}
+          <motion.div variants={itemVariants} className="space-y-4">
+            <h4 className="text-sm font-bold tracking-wider uppercase text-white">من نحن</h4>
+            <p className="text-sm text-gray-400 leading-relaxed">
+              متجر إلكتروني لبيع النظارات والعدسات اللاصقة.
+            </p>
+            <div className="pt-2 space-y-2">
+              <a
+                href="mailto:sightnessexpert@gmail.com"
+                className="text-sm text-gray-400 hover:text-white transition-colors flex items-center gap-2"
+              >
+                <Mail size={16} />
+                sightnessexpert@gmail.com
+              </a>
+              <p className="text-xs text-gray-500 leading-relaxed">
+                متاح طوال اليوم (24/7) <br />
+                Available 24/7 for you.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* العمود الثاني: تسوق معنا */}
           <motion.div variants={itemVariants}>
-            <h4 className="text-sm font-bold mb-6 tracking-wider">تسوق معنا</h4>
+            <h4 className="text-sm font-bold tracking-wider uppercase mb-6 text-white">تسوق معنا</h4>
             <ul className="space-y-3">
               {links.shop.map((link) => (
                 <li key={link.href}>
@@ -115,24 +135,23 @@ export const Footer = () => {
             </ul>
           </motion.div>
 
-          {/* About Us (الكليشة الجديدة المخصصة) */}
+          {/* العمود الثالث: نبذة عنا (الكليشة الحصرية مالتك) */}
           <motion.div variants={itemVariants}>
-            <h4 className="text-sm font-bold mb-6 tracking-wider">من نحن</h4>
-            <div className="text-sm text-gray-400 space-y-3 leading-relaxed">
-              <p className="font-semibold text-white" dir="ltr">Medical grade, global aesthetics.</p>
-              <p className="text-white font-medium">معايير عالمية لرؤية لا مثيل لها.</p>
-              <ul className="space-y-2 mt-2">
-                <li>• كولكشن نظارات طبية وشمسية</li>
+            <h4 className="text-sm font-bold tracking-wider uppercase mb-6 text-white">نبذة عنا</h4>
+            <div className="text-sm text-gray-400 space-y-2 leading-relaxed">
+              <p className="font-semibold text-white">Medical grade, global aesthetics.</p>
+              <p className="text-gray-300 font-medium">معايير عالمية لرؤية لا مثيل لها.</p>
+              <ul className="space-y-1 text-xs pt-1 text-gray-400">
+                <li>• كولكشن نظارات طبيّة وشمسية</li>
                 <li>• عدسات لاصقة (Premium)</li>
-                <li>• تجهيز دقيق لوصفتك الطبية</li>
-                <li>• جودة فائقة وتصاميم حصرية تناسب ذوقك</li>
+                <li>• تجهيز دقيق لوصفتك الطبيّه</li>
               </ul>
             </div>
           </motion.div>
 
-          {/* Legal Links */}
+          {/* العمود الرابع: السياسات */}
           <motion.div variants={itemVariants}>
-            <h4 className="text-sm font-bold mb-6 tracking-wider">سياسات وقوانين</h4>
+            <h4 className="text-sm font-bold tracking-wider uppercase mb-6 text-white">سياساتنا</h4>
             <ul className="space-y-3">
               {links.legal.map((link) => (
                 <li key={link.href}>
@@ -146,28 +165,6 @@ export const Footer = () => {
               ))}
             </ul>
           </motion.div>
-
-          {/* Contact Info */}
-          <motion.div variants={itemVariants}>
-            <h4 className="text-sm font-bold mb-6 tracking-wider">تواصل معنا</h4>
-            <ul className="space-y-3">
-              <li>
-                <a
-                  href="mailto:sightnessexpert@gmail.com"
-                  className="text-sm text-gray-400 hover:text-white transition-colors flex items-center justify-end gap-2"
-                  dir="ltr"
-                >
-                  sightnessexpert@gmail.com
-                  <Mail size={16} />
-                </a>
-              </li>
-              <li className="text-sm text-gray-400 mt-4 leading-relaxed">
-                متاح طوال اليوم، على مدار 24 ساعة <br />
-                للرد على استفساراتكم وتلبية طلباتكم. <br />
-                <span className="text-xs text-gray-500">(Available 24/7)</span>
-              </li>
-            </ul>
-          </motion.div>
         </motion.div>
 
         {/* Bottom Section */}
@@ -175,14 +172,14 @@ export const Footer = () => {
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
-          className="pt-8 border-t border-white/10 flex flex-col-reverse md:flex-row justify-between items-center gap-6"
+          className="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-6"
         >
-          {/* Copyright */}
-          <p className="text-sm text-gray-500" dir="ltr">
+          {/* حقوق الحفظ والتأليف */}
+          <p className="text-sm text-gray-500">
             © {new Date().getFullYear()} Sightness Expert. All rights reserved.
           </p>
 
-          {/* Social Links */}
+          {/* روابط التواصل الاجتماعي */}
           <div className="flex items-center gap-6">
             {links.social.map((social) => {
               const Icon = social.icon;
