@@ -1,189 +1,111 @@
 'use client';
 
-import { Navbar, Footer } from '@/components';
-import { motion } from 'framer-motion';
+import { useLanguage } from './LanguageContext';
 import { Mail, Phone, MapPin, Send } from 'lucide-react';
-import { useState } from 'react';
 
-const ContactPage = () => {
-  // 💡 يمكنك ربط هذا المتغير لاحقاً بالبيانات القادمة من لوحة التحكم (Admin Dashboard)
-  const phoneNumberFromAdmin = "+964 XX XXX XXXX"; 
+export function ContactSection() {
+  const { language } = useLanguage();
 
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  });
-
-  const [submitted, setSubmitted] = useState(false);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+  const content = {
+    en: {
+      heading: 'Get in Touch',
+      subheading: 'Have questions? We would love to hear from you. Contact us today.',
+      email: 'Email',
+      phone: 'Phone',
+      address: 'Address',
+      hoursTitle: 'Business Hours',
+      hoursWeek: 'Monday - Friday: 9:00 AM - 6:00 PM EST',
+      hoursSat: 'Saturday: 10:00 AM - 4:00 PM EST',
+      hoursSun: 'Sunday: Closed',
+      namePlaceholder: 'Your Name',
+      emailPlaceholder: 'Your Email',
+      subjectPlaceholder: 'Subject',
+      messagePlaceholder: 'Your Message',
+      btn: 'Send Message'
+    },
+    ar: {
+      heading: 'تواصل معنا',
+      subheading: 'هل لديك أي استفسارات؟ يسعدنا دائماً سماع رأيك والتواصل معك في أي وقت.',
+      email: 'البريد الإلكتروني',
+      phone: 'الهاتف',
+      address: 'العنوان',
+      hoursTitle: 'أوقات العمل',
+      hoursWeek: 'الاثنين - الجمعة: 9:00 صباحاً - 6:00 مساءً',
+      hoursSat: 'السبت: 10:00 صباحاً - 4:00 مساءً',
+      hoursSun: 'الأحد: مغلق',
+      namePlaceholder: 'الاسم الكريم',
+      emailPlaceholder: 'البريد الإلكتروني',
+      subjectPlaceholder: 'عنوان الرسالة',
+      messagePlaceholder: 'اكتب رسالتك هنا...',
+      btn: 'إرسال الرسالة'
+    }
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    setSubmitted(true);
-    setTimeout(() => {
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      setSubmitted(false);
-    }, 3000);
-  };
+  const t = content[language];
 
   return (
-    <>
-      <Navbar />
-      <div className="min-h-screen pt-24 pb-20 bg-black text-white">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-7xl mx-auto px-4 mb-16 text-center"
-        >
-          <h1 className="text-4xl md:text-5xl font-light tracking-tighter mb-4">
-            Get in Touch
-          </h1>
-          <p className="text-gray-400 max-w-2xl mx-auto">
-            Have questions? We'd love to hear from you. Contact us today.
-          </p>
-        </motion.div>
+    <section className="bg-black text-white py-20 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <div className="text-center mb-16">
+          <h2 className="text-3xl sm:text-4xl font-light tracking-wide mb-4">{t.heading}</h2>
+          <p className="text-gray-400 text-sm max-w-xl mx-auto font-light leading-relaxed">{t.subheading}</p>
+        </div>
 
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-            {/* Contact Info */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="space-y-8"
-            >
-              {[
-                {
-                  icon: Mail,
-                  label: 'Email',
-                  value: 'sightnessexpert@gmail.com', // تم التصحيح هنا
-                },
-                {
-                  icon: Phone,
-                  label: 'Phone',
-                  value: phoneNumberFromAdmin, // مرتبط بالآدمن هنا
-                },
-                {
-                  icon: MapPin,
-                  label: 'Address',
-                  value: 'Baghdad, Iraq', // تم التحديث هنا
-                },
-              ].map((item, i) => {
-                const Icon = item.icon;
-                return (
-                  <div key={i}>
-                    <div className="flex items-center gap-3 mb-2">
-                      <Icon size={20} />
-                      <h3 className="font-light text-lg">{item.label}</h3>
-                    </div>
-                    {item.label === 'Email' ? (
-                      <a 
-                        href={`mailto:${item.value}`} 
-                        className="text-gray-400 ml-8 hover:text-white transition-colors block text-sm sm:text-base"
-                      >
-                        {item.value}
-                      </a>
-                    ) : (
-                      <p className="text-gray-400 ml-8 text-sm sm:text-base">{item.value}</p>
-                    )}
-                  </div>
-                );
-              })}
-
-              {/* Hours */}
-              <div className="border-t border-white/10 pt-8">
-                <h3 className="font-light text-lg mb-4">Business Hours</h3>
-                <div className="text-gray-400 space-y-2 text-sm">
-                  <p>Monday - Friday: 9:00 AM - 6:00 PM EST</p>
-                  <p>Saturday: 10:00 AM - 4:00 PM EST</p>
-                  <p>Sunday: Closed</p>
-                </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
+          {/* تفاصيل الاتصال */}
+          <div className="lg:col-span-4 space-y-8 bg-zinc-900/30 p-8 border border-white/5 rounded-2xl">
+            <div className="flex items-start gap-4">
+              <Mail className="text-gray-400 mt-1 shrink-0" size={20} />
+              <div>
+                <h4 className="text-sm font-semibold text-gray-300">{t.email}</h4>
+                <p className="text-sm text-gray-400 mt-1 break-all">hello@sightnessexpert.com</p>
               </div>
-            </motion.div>
+            </div>
 
-            {/* Contact Form */}
-            <motion.form
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              onSubmit={handleSubmit}
-              className="lg:col-span-2 bg-white/5 p-8 rounded-lg border border-white/10"
-            >
-              {submitted && (
-                <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  className="mb-6 bg-green-400/20 border border-green-400/50 text-green-400 px-4 py-3 rounded-lg text-sm"
-                >
-                  Thank you for your message! We'll get back to you soon.
-                </motion.div>
-              )}
-
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
-                <input
-                  type="text"
-                  name="name"
-                  value={formData.name}
-                  onChange={handleChange}
-                  placeholder="Your Name"
-                  className="bg-white/5 border border-white/20 rounded-lg px-4 py-3 focus:border-white outline-none transition-colors"
-                  required
-                />
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleChange}
-                  placeholder="Your Email"
-                  className="bg-white/5 border border-white/20 rounded-lg px-4 py-3 focus:border-white outline-none transition-colors"
-                  required
-                />
+            <div className="flex items-start gap-4">
+              <Phone className="text-gray-400 mt-1 shrink-0" size={20} />
+              <div>
+                <h4 className="text-sm font-semibold text-gray-300">{t.phone}</h4>
+                <p className="text-sm text-gray-400 mt-1" dir="ltr">+1 (555) 123-4567</p>
               </div>
+            </div>
 
-              <input
-                type="text"
-                name="subject"
-                value={formData.subject}
-                onChange={handleChange}
-                placeholder="Subject"
-                className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-3 focus:border-white outline-none transition-colors mb-6"
-                required
-              />
+            <div className="flex items-start gap-4">
+              <MapPin className="text-gray-400 mt-1 shrink-0" size={20} />
+              <div>
+                <h4 className="text-sm font-semibold text-gray-300">{t.address}</h4>
+                <p className="text-sm text-gray-400 mt-1">{t.address === 'Address' ? 'New York, NY 10001, USA' : 'الولايات المتحدة، نيويورك'}</p>
+              </div>
+            </div>
 
-              <textarea
-                name="message"
-                value={formData.message}
-                onChange={handleChange}
-                placeholder="Your Message"
-                rows={6}
-                className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-3 focus:border-white outline-none transition-colors mb-6 resize-none"
-                required
-              />
+            <div className="pt-6 border-t border-white/5">
+              <h4 className="text-xs font-bold tracking-wider uppercase text-white mb-3">{t.hoursTitle}</h4>
+              <ul className="text-xs text-gray-400 space-y-2 font-light">
+                <li>{t.hoursWeek}</li>
+                <li>{t.hoursSat}</li>
+                <li>{t.hoursSun}</li>
+              </ul>
+            </div>
+          </div>
 
-              <button
-                type="submit"
-                className="flex items-center gap-2 bg-white text-black px-8 py-3 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
-              >
-                <Send size={18} />
-                Send Message
+          {/* الفورم الأنيق */}
+          <div className="lg:col-span-8 bg-zinc-900/50 p-6 sm:p-8 border border-white/10 rounded-2xl">
+            <form onSubmit={(e) => e.preventDefault()} className="space-y-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <input type="text" placeholder={t.namePlaceholder} className="w-full bg-black/40 border border-white/10 focus:border-white px-4 py-3 rounded-xl text-sm outline-none transition-colors text-white" />
+                <input type="email" placeholder={t.emailPlaceholder} className="w-full bg-black/40 border border-white/10 focus:border-white px-4 py-3 rounded-xl text-sm outline-none transition-colors text-white" />
+              </div>
+              <input type="text" placeholder={t.subjectPlaceholder} className="w-full bg-black/40 border border-white/10 focus:border-white px-4 py-3 rounded-xl text-sm outline-none transition-colors text-white" />
+              <textarea rows={5} placeholder={t.messagePlaceholder} className="w-full bg-black/40 border border-white/10 focus:border-white px-4 py-3 rounded-xl text-sm outline-none transition-colors text-white resize-none"></textarea>
+              
+              <button type="submit" className="flex items-center gap-2 px-6 py-3 bg-white text-black font-medium text-sm rounded-xl hover:bg-gray-200 transition-colors duration-300">
+                <Send size={16} />
+                {t.btn}
               </button>
-            </motion.form>
+            </form>
           </div>
         </div>
       </div>
-      <Footer />
-    </>
+    </section>
   );
-};
-
-export default ContactPage;
+}
