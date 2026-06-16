@@ -4,53 +4,32 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { supabase } from '@/lib/supabase';
+import { useLocalAdminStore } from '@/stores/adminStore';
 
 export default function LoginPage() {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+  const login = useLocalAdminStore((state) => state.login);
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
     setError(null);
 
-    try {
-      const { error: authError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (authError) {
-        setError(authError.message);
-        return;
-      }
-
-      // Check if user is admin and redirect accordingly
-      const { data: userData } = await supabase
-        .from('users')
-        .select('role')
-        .eq('email', email)
-        .single();
-
-      if (userData?.role === 'admin') {
-        router.push('/admin');
-      } else {
-        router.push('/');
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
+    const success = login(username, password);
+    if (success) {
+      router.push('/admin');
+    } else {
+      setError('Invalid username or password');
       setLoading(false);
     }
   };
 
   return (
     <div className="min-h-screen bg-black flex items-center justify-center px-4">
-      {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent -z-10" />
 
       <motion.div
@@ -78,15 +57,15 @@ export default function LoginPage() {
             </motion.div>
           )}
 
-          {/* Email */}
+          {/* Username */}
           <div>
-            <label className="block text-sm font-light mb-2">Email</label>
+            <label className="block text-sm font-light mb-2">Username</label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               className="w-full bg-white/5 border border-white/20 rounded-lg px-4 py-3 text-sm focus:border-white outline-none transition-colors"
-              placeholder="admin@sightnessexpert.com"
+              placeholder="admin"
               required
             />
           </div>
@@ -104,20 +83,6 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* Remember & Forgot */}
-          <div className="flex items-center justify-between text-sm">
-            <label className="flex items-center gap-2 font-light">
-              <input
-                type="checkbox"
-                className="w-4 h-4 bg-white/10 border border-white/20 rounded"
-              />
-              Remember me
-            </label>
-            <Link href="/auth/forgot-password" className="text-gray-400 hover:text-white transition-colors">
-              Forgot password?
-            </Link>
-          </div>
-
           {/* Submit Button */}
           <button
             type="submit"
@@ -128,9 +93,16 @@ export default function LoginPage() {
           </button>
         </form>
 
-        {/* Footer */}
-        <p className="text-center text-sm text-gray-400 mt-8 font-light">
-          Contact support for account access
+        <div className="mt-8 text-center">
+          <p className="text-xs text-gray-500 mb-2">Default login:</p>
+          <p className="text-xs text-gray-400">Username: admin</p>
+          <p className="text-xs text-gray-400">Password: admin123</p>
+        </div>
+
+        <p className="text-center text-sm text-gray-400 mt-6 font-light">
+          <Link href="/" className="text-white hover:text-gray-300 transition-colors">
+            ← Back to Home
+          </Link>
         </p>
       </motion.div>
     </div>

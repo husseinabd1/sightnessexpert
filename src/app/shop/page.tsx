@@ -5,93 +5,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Filter, Search, X, SlidersHorizontal, ShoppingCart } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { useCartStore } from '@/stores/cartStore';
+import { useProductStore } from '@/stores/productStore';
 import Link from 'next/link';
-
-interface Product {
-  id: string;
-  name: string;
-  price: number;
-  originalPrice?: number;
-  image: string;
-  category: string;
-  slug: string;
-}
-
-const allProducts: Product[] = [
-  {
-    id: '1',
-    name: 'Premium Visual Experience',
-    price: 299,
-    originalPrice: 399,
-    image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=500&h=500&fit=crop',
-    category: 'Visual',
-    slug: 'premium-visual-experience',
-  },
-  {
-    id: '2',
-    name: 'Luxury Design Collection',
-    price: 199,
-    image: 'https://images.unsplash.com/photo-1598930113854-38c6a72d0e0f?w=500&h=500&fit=crop',
-    category: 'Design',
-    slug: 'luxury-design-collection',
-  },
-  {
-    id: '3',
-    name: 'Exclusive Portfolio Set',
-    price: 249,
-    originalPrice: 349,
-    image: 'https://images.unsplash.com/photo-1606115915156-f7e3f0d3c7ba?w=500&h=500&fit=crop',
-    category: 'Portfolio',
-    slug: 'exclusive-portfolio-set',
-  },
-  {
-    id: '4',
-    name: 'Creative Master Edition',
-    price: 349,
-    image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=500&h=500&fit=crop',
-    category: 'Creative',
-    slug: 'creative-master-edition',
-  },
-  {
-    id: '5',
-    name: 'Premium Collection Vol 2',
-    price: 279,
-    originalPrice: 399,
-    image: 'https://images.unsplash.com/photo-1600298881974-6be191ceeda1?w=500&h=500&fit=crop',
-    category: 'Collection',
-    slug: 'premium-collection-vol-2',
-  },
-  {
-    id: '6',
-    name: 'Signature Series',
-    price: 229,
-    image: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=500&h=500&fit=crop',
-    category: 'Series',
-    slug: 'signature-series',
-  },
-  {
-    id: '7',
-    name: 'Elite Luxury Pack',
-    price: 449,
-    image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?w=500&h=500&fit=crop',
-    category: 'Elite',
-    slug: 'elite-luxury-pack',
-  },
-  {
-    id: '8',
-    name: 'Premium Essentials',
-    price: 179,
-    image: 'https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=500&h=500&fit=crop',
-    category: 'Essentials',
-    slug: 'premium-essentials',
-  },
-];
 
 const categories = ['All', 'Visual', 'Design', 'Portfolio', 'Creative', 'Collection', 'Series', 'Elite', 'Essentials'];
 
 type SortOption = 'latest' | 'price-asc' | 'price-desc' | 'name-asc';
 
 const ShopPage = () => {
+  const { products, getActiveProducts } = useProductStore();
+  const activeProducts = getActiveProducts();
   const [filterOpen, setFilterOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -101,9 +24,8 @@ const ShopPage = () => {
   const addItem = useCartStore((state) => state.addItem);
 
   const filteredProducts = useMemo(() => {
-    let result = [...allProducts];
+    let result = [...activeProducts];
 
-    // Search filter
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
       result = result.filter(
@@ -113,15 +35,12 @@ const ShopPage = () => {
       );
     }
 
-    // Category filter
     if (selectedCategory !== 'All') {
       result = result.filter((product) => product.category === selectedCategory);
     }
 
-    // Price filter
     result = result.filter((product) => product.price <= priceRange);
 
-    // Sorting
     switch (sortBy) {
       case 'price-asc':
         result.sort((a, b) => a.price - b.price);
@@ -138,7 +57,7 @@ const ShopPage = () => {
     }
 
     return result;
-  }, [searchQuery, selectedCategory, priceRange, sortBy]);
+  }, [activeProducts, searchQuery, selectedCategory, priceRange, sortBy]);
 
   const clearFilters = () => {
     setSearchQuery('');
@@ -149,7 +68,7 @@ const ShopPage = () => {
 
   const hasActiveFilters = !!(searchQuery) || selectedCategory !== 'All' || priceRange < 500 || sortBy !== 'latest';
 
-  const handleAddToCart = (product: Product) => {
+  const handleAddToCart = (product: typeof activeProducts[0]) => {
     addItem({
       productId: product.id,
       name: product.name,
@@ -166,7 +85,6 @@ const ShopPage = () => {
       <Navbar />
       <div className="min-h-screen pt-24 pb-20 px-4 bg-black text-white">
         <div className="max-w-7xl mx-auto">
-          {/* Header */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -180,7 +98,6 @@ const ShopPage = () => {
             </p>
           </motion.div>
 
-          {/* Search Bar */}
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
@@ -207,7 +124,6 @@ const ShopPage = () => {
             </div>
           </motion.div>
 
-          {/* Mobile Filter Toggle */}
           <div className="md:hidden mb-6">
             <button
               onClick={() => setFilterOpen(!filterOpen)}
@@ -222,7 +138,6 @@ const ShopPage = () => {
           </div>
 
           <div className="flex gap-8">
-            {/* Sidebar Filters - Desktop */}
             <motion.aside
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -240,7 +155,6 @@ const ShopPage = () => {
               />
             </motion.aside>
 
-            {/* Mobile Filter Panel */}
             <AnimatePresence>
               {filterOpen && (
                 <motion.div
@@ -284,9 +198,7 @@ const ShopPage = () => {
               )}
             </AnimatePresence>
 
-            {/* Products Grid */}
             <div className="flex-1">
-              {/* Results count & active filters */}
               <div className="flex items-center justify-between mb-6">
                 <p className="text-sm text-gray-400">
                   {filteredProducts.length} product{filteredProducts.length !== 1 ? 's' : ''} found
@@ -302,7 +214,6 @@ const ShopPage = () => {
                 )}
               </div>
 
-              {/* Products */}
               {filteredProducts.length > 0 ? (
                 <motion.div
                   layout
@@ -397,7 +308,6 @@ const ShopPage = () => {
   );
 };
 
-// Filter Panel Component
 interface FilterPanelProps {
   selectedCategory: string;
   setSelectedCategory: (cat: string) => void;
@@ -421,7 +331,6 @@ const FilterPanel = ({
 }: FilterPanelProps) => {
   return (
     <div className="space-y-6 bg-white/5 p-6 rounded-lg border border-white/10">
-      {/* Categories */}
       <div>
         <h3 className="font-light text-lg mb-4 tracking-wide">Categories</h3>
         <div className="space-y-2">
@@ -441,7 +350,6 @@ const FilterPanel = ({
         </div>
       </div>
 
-      {/* Price Range */}
       <div className="border-t border-white/10 pt-6">
         <h3 className="font-light text-lg mb-4 tracking-wide">Price Range</h3>
         <input
@@ -460,7 +368,6 @@ const FilterPanel = ({
         </div>
       </div>
 
-      {/* Sort By */}
       <div className="border-t border-white/10 pt-6">
         <h3 className="font-light text-lg mb-4 tracking-wide">Sort By</h3>
         <select
@@ -475,7 +382,6 @@ const FilterPanel = ({
         </select>
       </div>
 
-      {/* Clear Filters */}
       {hasActiveFilters && (
         <div className="border-t border-white/10 pt-6">
           <button

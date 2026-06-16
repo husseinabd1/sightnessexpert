@@ -4,126 +4,30 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ShoppingCart } from 'lucide-react';
-import { formatCurrency, calculateDiscount } from '@/utils/helpers';
+import { useCartStore } from '@/stores/cartStore';
+import { useProductStore } from '@/stores/productStore';
+import { useState } from 'react';
 
-interface ProductCardProps {
-  id: string;
-  name: string;
-  price: number;
-  originalPrice?: number;
-  image: string;
-  slug: string;
-  featured?: boolean;
-}
+export default function FeaturedProducts() {
+  const featuredProducts = useProductStore((state) => state.getFeaturedProducts());
+  const addItem = useCartStore((state) => state.addItem);
+  const [addedProductId, setAddedProductId] = useState<string | null>(null);
 
-const ProductCard = ({ id, name, price, originalPrice, image, slug, featured }: ProductCardProps) => {
-  const discount = originalPrice ? calculateDiscount(originalPrice, price) : null;
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      whileHover={{ y: -5 }}
-      className="group"
-    >
-      <Link href={`/products/${slug}`}>
-        <div className="relative overflow-hidden rounded-lg mb-4 bg-white/5 aspect-square">
-          {/* Product Image */}
-          <Image
-            src={image}
-            alt={name}
-            fill
-            className="object-cover group-hover:scale-110 transition-transform duration-500"
-          />
-
-          {/* Discount Badge */}
-          {discount && (
-            <div className="absolute top-4 right-4 bg-white text-black px-3 py-1 text-xs font-bold tracking-wider rounded-full">
-              -{discount}%
-            </div>
-          )}
-
-          {/* Featured Badge */}
-          {featured && (
-            <div className="absolute top-4 left-4 border border-white px-3 py-1 text-xs font-light tracking-wider rounded-full">
-              FEATURED
-            </div>
-          )}
-
-          {/* Hover overlay */}
-          <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-            <button className="bg-white text-black px-6 py-3 font-semibold text-sm flex items-center gap-2 hover:bg-gray-200 transition-colors">
-              <ShoppingCart size={16} />
-              Add to Cart
-            </button>
-          </div>
-        </div>
-
-        {/* Product Info */}
-        <h3 className="text-sm font-light tracking-wide mb-2 group-hover:text-gray-300 transition-colors">
-          {name}
-        </h3>
-        <div className="flex items-center gap-2">
-          <span className="text-lg font-semibold">{formatCurrency(price)}</span>
-          {originalPrice && (
-            <span className="text-sm text-gray-500 line-through">
-              {formatCurrency(originalPrice)}
-            </span>
-          )}
-        </div>
-      </Link>
-    </motion.div>
-  );
-};
-
-interface FeaturedProductsProps {
-  products?: ProductCardProps[];
-}
-
-export const FeaturedProducts = ({ products = [] }: FeaturedProductsProps) => {
-  // Empty products - all products should be added via admin dashboard
-  const defaultProducts: ProductCardProps[] = [
-    {
-      id: '1',
-      name: 'Premium Visual Experience',
-      price: 299,
-      originalPrice: 399,
-      image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?w=500&h=500&fit=crop',
-      slug: 'premium-visual-experience',
-      featured: true,
-    },
-    {
-      id: '2',
-      name: 'Luxury Design Collection',
-      price: 199,
-      image: 'https://images.unsplash.com/photo-1598930113854-38c6a72d0e0f?w=500&h=500&fit=crop',
-      slug: 'luxury-design-collection',
-    },
-    {
-      id: '3',
-      name: 'Exclusive Portfolio Set',
-      price: 249,
-      originalPrice: 349,
-      image: 'https://images.unsplash.com/photo-1606115915156-f7e3f0d3c7ba?w=500&h=500&fit=crop',
-      slug: 'exclusive-portfolio-set',
-      featured: true,
-    },
-    {
-      id: '4',
-      name: 'Creative Master Edition',
-      price: 349,
-      image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=500&h=500&fit=crop',
-      slug: 'creative-master-edition',
-    },
-  ];
-
-  const displayProducts = products.length > 0 ? products : defaultProducts;
+  const handleAddToCart = (product: typeof featuredProducts[0]) => {
+    addItem({
+      productId: product.id,
+      name: product.name,
+      price: product.price,
+      quantity: 1,
+      image: product.image,
+    });
+    setAddedProductId(product.id);
+    setTimeout(() => setAddedProductId(null), 2000);
+  };
 
   return (
     <section className="py-20 px-4">
       <div className="max-w-7xl mx-auto">
-        {/* Section Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -138,16 +42,69 @@ export const FeaturedProducts = ({ products = [] }: FeaturedProductsProps) => {
           </p>
         </motion.div>
 
-        {/* Products Grid or Empty State */}
-        {displayProducts.length > 0 ? (
+        {featuredProducts.length > 0 ? (
           <>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              {displayProducts.map((product) => (
-                <ProductCard key={product.id} {...product} />
+              {featuredProducts.map((product) => (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  whileHover={{ y: -5 }}
+                  className="group"
+                >
+                  <Link href={`/products/${product.slug}`}>
+                    <div className="relative overflow-hidden rounded-lg mb-4 bg-white/5 aspect-square">
+                      <img
+                        src={product.image}
+                        alt={product.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                      />
+                      {product.originalPrice && (
+                        <div className="absolute top-4 right-4 bg-white text-black px-3 py-1 text-xs font-bold tracking-wider rounded-full">
+                          -{Math.round((1 - product.price / product.originalPrice) * 100)}%
+                        </div>
+                      )}
+                      <div className="absolute top-4 left-4 border border-white px-3 py-1 text-xs font-light tracking-wider rounded-full">
+                        FEATURED
+                      </div>
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-300 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleAddToCart(product);
+                          }}
+                          className={`px-6 py-3 font-semibold text-sm flex items-center gap-2 rounded-lg transition-colors ${
+                            addedProductId === product.id
+                              ? 'bg-green-600 text-white'
+                              : 'bg-white text-black hover:bg-gray-200'
+                          }`}
+                        >
+                          <ShoppingCart size={16} />
+                          {addedProductId === product.id ? 'Added!' : 'Add to Cart'}
+                        </button>
+                      </div>
+                    </div>
+                  </Link>
+
+                  <Link href={`/products/${product.slug}`}>
+                    <h3 className="text-sm font-light tracking-wide mb-2 group-hover:text-gray-300 transition-colors">
+                      {product.name}
+                    </h3>
+                  </Link>
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-semibold">${product.price}</span>
+                    {product.originalPrice && (
+                      <span className="text-sm text-gray-500 line-through">
+                        ${product.originalPrice}
+                      </span>
+                    )}
+                  </div>
+                </motion.div>
               ))}
             </div>
 
-            {/* View All Button */}
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -169,8 +126,8 @@ export const FeaturedProducts = ({ products = [] }: FeaturedProductsProps) => {
             viewport={{ once: true }}
             className="flex flex-col items-center justify-center py-20 border border-white/10 rounded-lg bg-white/5"
           >
-            <h3 className="text-2xl font-light mb-4">No Products Available</h3>
-            <p className="text-gray-400 font-light mb-6">Start by adding products through the admin dashboard</p>
+            <h3 className="text-2xl font-light mb-4">No Featured Products</h3>
+            <p className="text-gray-400 font-light mb-6">Add featured products from the admin dashboard</p>
             <Link
               href="/auth/login"
               className="px-6 py-3 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors"
@@ -182,4 +139,4 @@ export const FeaturedProducts = ({ products = [] }: FeaturedProductsProps) => {
       </div>
     </section>
   );
-};
+}

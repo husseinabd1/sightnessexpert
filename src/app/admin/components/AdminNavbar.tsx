@@ -1,6 +1,6 @@
 'use client';
 
-import { useAuth } from '@/hooks';
+import { useLocalAdminStore } from '@/stores/adminStore';
 import { Bell, Menu, User } from 'lucide-react';
 
 interface AdminNavbarProps {
@@ -8,12 +8,11 @@ interface AdminNavbarProps {
 }
 
 export default function AdminNavbar({ onMenuClick }: AdminNavbarProps = {}) {
-  const { user } = useAuth();
+  const { logout } = useLocalAdminStore();
 
   return (
     <header className="sticky top-0 bg-black/80 backdrop-blur-md border-b border-white/10 z-20">
       <div className="flex items-center justify-between px-6 py-4">
-        {/* Left side */}
         <button
           onClick={onMenuClick}
           className="md:hidden p-2 hover:bg-white/10 rounded-lg transition-colors"
@@ -25,7 +24,6 @@ export default function AdminNavbar({ onMenuClick }: AdminNavbarProps = {}) {
           Admin Dashboard
         </h1>
 
-        {/* Right side */}
         <div className="flex items-center gap-4">
           <button className="p-2 hover:bg-white/10 rounded-lg transition-colors relative">
             <Bell size={20} />
@@ -34,13 +32,20 @@ export default function AdminNavbar({ onMenuClick }: AdminNavbarProps = {}) {
 
           <div className="flex items-center gap-3 pl-4 border-l border-white/10">
             <div className="text-right">
-              <p className="text-sm font-light">{user?.email}</p>
+              <p className="text-sm font-light">admin</p>
               <p className="text-xs text-gray-500">Administrator</p>
             </div>
             <div className="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center">
               <User size={20} />
             </div>
           </div>
+
+          <button
+            onClick={logout}
+            className="px-3 py-1.5 text-xs bg-red-600/20 text-red-400 border border-red-600/30 rounded-lg hover:bg-red-600/30 transition-colors"
+          >
+            Logout
+          </button>
         </div>
       </div>
     </header>

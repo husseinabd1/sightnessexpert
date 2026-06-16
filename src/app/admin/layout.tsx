@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { useAuth } from '@/hooks';
+import { useLocalAdminStore } from '@/stores/adminStore';
 import AdminNavbar from './components/AdminNavbar';
 import AdminSidebar from './components/AdminSidebar';
 
@@ -12,19 +12,19 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const router = useRouter();
-  const { user, loading } = useAuth();
+  const { isLoggedIn } = useLocalAdminStore();
 
-  // Redirect to login if not authenticated
-  if (!loading && !user) {
-    router.push('/auth/login');
-    return null;
-  }
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.push('/auth/login');
+    }
+  }, [isLoggedIn, router]);
 
-  if (loading) {
+  if (!isLoggedIn) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-black text-white">
         <div className="text-center">
-          <p className="mb-2">Loading...</p>
+          <p className="mb-2">Redirecting to login...</p>
         </div>
       </div>
     );
@@ -32,10 +32,7 @@ export default function AdminLayout({
 
   return (
     <div className="flex h-screen bg-black text-white">
-      {/* Sidebar */}
       <AdminSidebar />
-
-      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <AdminNavbar />
         <main className="flex-1 overflow-auto bg-black">
