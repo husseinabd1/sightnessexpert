@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useLocalAdminStore } from '@/stores/adminStore';
 import AdminNavbar from './components/AdminNavbar';
@@ -13,12 +13,27 @@ export default function AdminLayout({
 }) {
   const router = useRouter();
   const { isLoggedIn } = useLocalAdminStore();
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    if (!isLoggedIn) {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (mounted && !isLoggedIn) {
       router.push('/auth/login');
     }
-  }, [isLoggedIn, router]);
+  }, [isLoggedIn, router, mounted]);
+
+  if (!mounted) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-black text-white">
+        <div className="text-center">
+          <p className="mb-2">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   if (!isLoggedIn) {
     return (

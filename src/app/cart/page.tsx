@@ -37,31 +37,12 @@ export default function CartPage() {
     const itemsList = items
       .map(
         (item, i) =>
-          `${i + 1}. ${item.name} × ${item.quantity} = ${formatCurrency(item.price * item.quantity)}`
+          `${i + 1}. ${item.name} x${item.quantity} = ${formatCurrency(item.price * item.quantity)}`
       )
       .join('\n');
 
     const subtotal = getTotalPrice();
-    const message = `🛒 *New Order - Sightness Expert*
-
-━━━━━━━━━━━━━━━━━━
-📦 *Order Items:*
-${itemsList}
-
-━━━━━━━━━━━━━━━━━━
-💰 *Subtotal:* ${formatCurrency(subtotal)}
-🚚 *Shipping:* Free
-💵 *Total:* ${formatCurrency(subtotal)}
-💳 *Payment:* Cash on Delivery
-
-━━━━━━━━━━━━━━━━━━
-👤 *Customer Info:*
-• Name: ${form.fullName}
-• Phone: ${form.phone}
-• City: ${form.city}
-• Address: ${form.address}
-${form.notes ? `• Notes: ${form.notes}` : ''}
-━━━━━━━━━━━━━━━━━━`;
+    const message = `طلب جديد - Sightness Expert\n\n📦 المنتجات:\n${itemsList}\n\n💰 المجموع: ${formatCurrency(subtotal)}\n🚚 الشحن: مجاني\n💵 الإجمالي: ${formatCurrency(subtotal)}\n💳 الدفع: نقداً عند الاستلام\n\n👤 معلومات الزبون:\nالاسم: ${form.fullName}\nالهاتف: ${form.phone}\nالمحافظة: ${form.city}\nالعنوان: ${form.address}${form.notes ? '\nملاحظات: ' + form.notes : ''}`;
 
     return encodeURIComponent(message);
   };

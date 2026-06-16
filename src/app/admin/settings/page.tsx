@@ -10,8 +10,6 @@ export default function SettingsPage() {
   const { settings, updateWhatsappNumber, updateSettings } = useSettingsStore();
   const { credentials, changePassword } = useLocalAdminStore();
 
-  const [whatsapp, setWhatsapp] = useState(settings.whatsappNumber);
-  const [storeName, setStoreName] = useState(settings.storeName);
   const [saved, setSaved] = useState(false);
 
   const [currentPassword, setCurrentPassword] = useState('');
@@ -23,6 +21,11 @@ export default function SettingsPage() {
 
   const handleSave = (e: React.FormEvent) => {
     e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const formData = new FormData(form);
+    const storeName = formData.get('storeName') as string;
+    const whatsapp = formData.get('whatsapp') as string;
+    
     updateWhatsappNumber(whatsapp);
     updateSettings({ storeName });
     setSaved(true);
@@ -102,8 +105,8 @@ export default function SettingsPage() {
               <Store size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
               <input
                 type="text"
-                value={storeName}
-                onChange={(e) => setStoreName(e.target.value)}
+                name="storeName"
+                defaultValue={settings.storeName}
                 placeholder="Store name"
                 className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:border-white focus:outline-none"
               />
@@ -116,8 +119,8 @@ export default function SettingsPage() {
               <Phone size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
               <input
                 type="text"
-                value={whatsapp}
-                onChange={(e) => setWhatsapp(e.target.value)}
+                name="whatsapp"
+                defaultValue={settings.whatsappNumber}
                 placeholder="964xxxxxxxxxx"
                 className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:border-white focus:outline-none"
               />
@@ -151,12 +154,12 @@ export default function SettingsPage() {
         <div className="flex items-center gap-3 bg-green-500/10 border border-green-500/20 rounded-lg p-4">
           <MessageCircle size={24} className="text-green-400" />
           <div>
-            <p className="text-green-400 font-medium">+{whatsapp || 'Not set'}</p>
+            <p className="text-green-400 font-medium">+{settings.whatsappNumber || 'Not set'}</p>
             <p className="text-xs text-gray-500">WhatsApp Business</p>
           </div>
         </div>
         <a
-          href={`https://wa.me/${whatsapp}`}
+          href={`https://wa.me/${settings.whatsappNumber}`}
           target="_blank"
           rel="noopener noreferrer"
           className="inline-block mt-4 text-sm text-green-400 hover:text-green-300 transition-colors"

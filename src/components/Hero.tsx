@@ -65,11 +65,11 @@ export const Hero = () => {
         {/* Logo */}
         <motion.div variants={itemVariants} className="mb-12">
           <Image 
-            src="/logo.svg" 
+            src="/logo.png" 
             alt="Sightness Expert Logo"
             width={200}
             height={200}
-            className="w-48 h-48 mx-auto opacity-90 hover:opacity-100 transition-opacity"
+            className="w-48 h-48 mx-auto opacity-90 hover:opacity-100 transition-opacity object-contain"
           />
         </motion.div>
 

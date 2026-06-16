@@ -30,9 +30,19 @@ export default function AdminSidebar() {
 
   return (
     <>
+      {/* Desktop Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-4 left-4 z-50 md:hidden bg-white text-black p-2 rounded-lg"
+        className="fixed top-4 left-4 z-50 hidden md:flex bg-white text-black p-2 rounded-lg shadow-lg hover:bg-gray-200 transition-colors"
+        title={isOpen ? 'Close sidebar' : 'Open sidebar'}
+      >
+        {isOpen ? <X size={20} /> : <Menu size={20} />}
+      </button>
+
+      {/* Mobile Toggle Button */}
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="fixed top-4 left-4 z-50 md:hidden bg-white text-black p-2 rounded-lg shadow-lg"
       >
         {isOpen ? <X size={20} /> : <Menu size={20} />}
       </button>
@@ -41,7 +51,7 @@ export default function AdminSidebar() {
         initial={{ x: -250 }}
         animate={{ x: isOpen ? 0 : -250 }}
         transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-        className="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 md:translate-x-0 z-40"
+        className="fixed left-0 top-0 h-full w-64 bg-white border-r border-gray-200 z-40"
       >
         <div className="p-6 border-b border-gray-200 flex items-center gap-3">
           <Image 
@@ -84,7 +94,7 @@ export default function AdminSidebar() {
 
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 md:hidden z-30"
+          className="fixed inset-0 bg-black/50 z-30"
           onClick={() => setIsOpen(false)}
         />
       )}

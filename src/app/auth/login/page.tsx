@@ -93,12 +93,6 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <div className="mt-8 text-center">
-          <p className="text-xs text-gray-500 mb-2">Default login:</p>
-          <p className="text-xs text-gray-400">Username: admin</p>
-          <p className="text-xs text-gray-400">Password: admin123</p>
-        </div>
-
         <p className="text-center text-sm text-gray-400 mt-6 font-light">
           <Link href="/" className="text-white hover:text-gray-300 transition-colors">
             ← Back to Home
