@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Instagram, Facebook, Mail } from 'lucide-react';
 import { useLanguage } from './LanguageContext';
+import { useSettingsStore } from '@/stores/settingsStore';
 
 const TiktokIcon = ({ size = 20 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -12,6 +13,8 @@ const TiktokIcon = ({ size = 20 }: { size?: number }) => (
 
 export const Footer = () => {
   const { language } = useLanguage();
+  const { settings } = useSettingsStore();
+  const email = settings.email || 'sightnessexpert@gmail.com';
 
   const content = {
     en: {
@@ -62,10 +65,10 @@ export const Footer = () => {
             <h4 className="text-sm font-bold tracking-wider uppercase text-white">{t.aboutTitle}</h4>
             <div className="pt-2 space-y-3">
               <a 
-                href="mailto:sightnessexpert@gmail.com" 
+                href={`mailto:${email}`}
                 className="text-sm text-gray-400 hover:text-white transition-colors inline-flex items-center gap-2 justify-center sm:justify-start"
               >
-                <Mail size={16} /> sightnessexpert@gmail.com
+                <Mail size={16} /> {email}
               </a>
               <p className="text-xs text-gray-500 font-light tracking-wide">{t.aboutDesc}</p>
             </div>

@@ -2,12 +2,14 @@
 
 import { Navbar, Footer } from '@/components';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { Mail, Phone, MapPin, Send, ExternalLink } from 'lucide-react';
 import { useState } from 'react';
+import { useSettingsStore } from '@/stores/settingsStore';
 
 const ContactPage = () => {
-  // يمكنك ربط هذا المتغير لاحقاً بالبيانات القادمة من لوحة التحكم (Admin Dashboard)
-  const phoneNumberFromAdmin = "+964 770 123 4567"; 
+  const { settings } = useSettingsStore();
+  const phoneNumber = settings.whatsappNumber || '+964 770 123 4567';
+  const email = settings.email || 'sightnessexpert@gmail.com';
 
   const [formData, setFormData] = useState({
     name: '',
@@ -27,12 +29,16 @@ const ContactPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
     setSubmitted(true);
     setTimeout(() => {
       setFormData({ name: '', email: '', subject: '', message: '' });
       setSubmitted(false);
     }, 3000);
+  };
+
+  const handleEmailClick = () => {
+    const mailtoLink = `mailto:${email}?subject=Message from Sightness Expert Website&body=Hello Sightness Expert Team,%0D%0A%0D%0A`;
+    window.open(mailtoLink, '_blank');
   };
 
   return (
@@ -62,50 +68,53 @@ const ContactPage = () => {
               viewport={{ once: true }}
               className="space-y-8"
             >
-              {[
-                {
-                  icon: Mail,
-                  label: 'Email',
-                  value: 'sightnessexpert@gmail.com', // تم التصحيح هنا
-                },
-                {
-                  icon: Phone,
-                  label: 'Phone',
-                  value: phoneNumberFromAdmin, // مرتبط بالآدمن هنا
-                },
-                {
-                  icon: MapPin,
-                  label: 'Address',
-                  value: 'Baghdad, Iraq', // تم التحديث هنا
-                },
-              ].map((item, i) => {
-                const Icon = item.icon;
-                return (
-                  <div key={i}>
-                    <div className="flex items-center gap-3 mb-2">
-                      <Icon size={20} />
-                      <h3 className="font-light text-lg">{item.label}</h3>
-                    </div>
-                    {item.label === 'Email' ? (
-                      <a 
-                        href={`mailto:${item.value}`} 
-                        className="text-gray-400 ml-8 hover:text-white transition-colors block text-sm sm:text-base"
-                      >
-                        {item.value}
-                      </a>
-                    ) : (
-                      <p className="text-gray-400 ml-8 text-sm sm:text-base">{item.value}</p>
-                    )}
-                  </div>
-                );
-              })}
+              {/* Email Section */}
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <Mail size={20} />
+                  <h3 className="font-light text-lg">Email</h3>
+                </div>
+                <p className="text-gray-400 ml-8 text-sm sm:text-base mb-3">{email}</p>
+                <button
+                  onClick={handleEmailClick}
+                  className="ml-8 flex items-center gap-2 px-4 py-2 bg-white text-black text-sm font-semibold rounded-lg hover:bg-gray-200 transition-colors"
+                >
+                  <ExternalLink size={14} />
+                  Send Email
+                </button>
+              </div>
+
+              {/* Phone Section */}
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <Phone size={20} />
+                  <h3 className="font-light text-lg">Phone</h3>
+                </div>
+                <a 
+                  href={`https://wa.me/${phoneNumber.replace(/[^0-9]/g, '')}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-gray-400 ml-8 hover:text-white transition-colors block text-sm sm:text-base"
+                >
+                  {phoneNumber}
+                </a>
+              </div>
+
+              {/* Address Section */}
+              <div>
+                <div className="flex items-center gap-3 mb-2">
+                  <MapPin size={20} />
+                  <h3 className="font-light text-lg">Address</h3>
+                </div>
+                <p className="text-gray-400 ml-8 text-sm sm:text-base">Baghdad, Iraq</p>
+              </div>
 
               {/* Hours */}
               <div className="border-t border-white/10 pt-8">
                 <h3 className="font-light text-lg mb-4">Business Hours</h3>
                 <div className="text-gray-400 space-y-2 text-sm">
-                  <p>Monday - Friday: 9:00 AM - 6:00 PM EST</p>
-                  <p>Saturday: 10:00 AM - 4:00 PM EST</p>
+                  <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+                  <p>Saturday: 10:00 AM - 4:00 PM</p>
                   <p>Sunday: Closed</p>
                 </div>
               </div>

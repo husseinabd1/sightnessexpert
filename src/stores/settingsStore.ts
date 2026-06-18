@@ -7,6 +7,7 @@ interface StoreSettings {
   whatsappNumber: string;
   storeName: string;
   currency: string;
+  email: string;
 }
 
 interface SettingsStore {
@@ -22,6 +23,7 @@ export const useSettingsStore = create<SettingsStore>()(
         whatsappNumber: '9647701234567',
         storeName: 'Sightness Expert',
         currency: 'USD',
+        email: 'sightnessexpert@gmail.com',
       },
 
       updateWhatsappNumber: (number) =>

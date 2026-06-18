@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Phone, Save, CheckCircle, Store, MessageCircle, Lock, Eye, EyeOff } from 'lucide-react';
+import { Phone, Save, CheckCircle, Store, MessageCircle, Lock, Eye, EyeOff, Mail } from 'lucide-react';
 import { useSettingsStore } from '@/stores/settingsStore';
 import { useLocalAdminStore } from '@/stores/adminStore';
 
@@ -25,9 +25,10 @@ export default function SettingsPage() {
     const formData = new FormData(form);
     const storeName = formData.get('storeName') as string;
     const whatsapp = formData.get('whatsapp') as string;
+    const email = formData.get('email') as string;
     
     updateWhatsappNumber(whatsapp);
-    updateSettings({ storeName });
+    updateSettings({ storeName, email });
     setSaved(true);
     setTimeout(() => setSaved(false), 3000);
   };
@@ -111,6 +112,23 @@ export default function SettingsPage() {
                 className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:border-white focus:outline-none"
               />
             </div>
+          </div>
+
+          <div>
+            <label className="block text-sm text-gray-400 mb-2">Business Email</label>
+            <div className="relative">
+              <Mail size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" />
+              <input
+                type="email"
+                name="email"
+                defaultValue={settings.email}
+                placeholder="business@example.com"
+                className="w-full pl-10 pr-4 py-3 bg-white/5 border border-white/20 rounded-lg text-white placeholder-gray-500 focus:border-white focus:outline-none"
+              />
+            </div>
+            <p className="text-xs text-gray-500 mt-2">
+              This email will be shown on the contact page and used for customer inquiries.
+            </p>
           </div>
 
           <div>
